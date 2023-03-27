@@ -1,14 +1,14 @@
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class Collage implements ICollage {
 
-  String projectName;
 
   private HashMap<String, Layer> knownImages;
 
@@ -52,13 +52,13 @@ public class Collage implements ICollage {
     return name.substring(0, name.lastIndexOf('.'));
   }
 
-/*  public void load(String filepath) {
+  public void load(String filepath) {
     if (filepath.endsWith("ppm")) {
       RGBA[][] newImage = readPPM(filepath);
-      Layer img = new Layer(this.height, this.width, newImage);
+      Layer img = new Layer(newImage, this);
       this.addImage(this.removeExtension(filepath), img);
     }
-  }*/
+  }
 
   public RGBA[][] readPPM(String filename) {
     Scanner sc;
@@ -98,20 +98,7 @@ public class Collage implements ICollage {
     return pixels;
   }
 
-  public Layer getImage(String oldName) {
-    int height = knownImages.get(oldName).getHeight();
-    int width = knownImages.get(oldName).getWidth();
-    RGBA[][] clone = new RGBA[height][width];
-    for (int y = 0; y < height; y++) {
-      for (int x = 0; x < width; x++) {
-        clone[y][x] = (new RGBA(knownImages.get(oldName).getPixelAt(y, x).getRed(),
-                knownImages.get(oldName).getPixelAt(y, x).getGreen(),
-                knownImages.get(oldName).getPixelAt(y, x).getBlue(),
-                knownImages.get(oldName).getPixelAt(y, x).getAlpha()));
-      }
-    }
-    return new Layer(height, width, clone);
-  }
+
 
   public void createProject(int height, int width) {
     this.height = height;
@@ -119,19 +106,29 @@ public class Collage implements ICollage {
     this.knownImages = new HashMap<>();
   }
 
+  public Layer getLayer(String oldName) {
+    RGBA[][] clone = new RGBA[this.height][this.width];
+    for (int y = 0; y < this.height; y++) {
+      for (int x = 0; x < this.width; x++) {
+        clone[y][x] = new RGBA(knownImages.get(oldName).getPixelAt(y, x).getRed(),
+                knownImages.get(oldName).getPixelAt(y, x).getGreen(),
+                knownImages.get(oldName).getPixelAt(y, x).getBlue(),
+                knownImages.get(oldName).getPixelAt(y, x).getAlpha());
+      }
+    }
+    return new Layer(clone, this);
+  }
 
   public void addLayer(String layer) throws IllegalArgumentException, NoSuchElementException {
     if (layer == null) {
       throw new IllegalArgumentException("The given ID can not be NULL.");
     }
-    if (knownImages.containsKey(layer)) {
-      throw new NoSuchElementException("Layer with id " + layer + " exists");
-    }
-    this.knownImages.put(layer, new Layer(new Collage(this.height, this.width)));
+
+    this.knownImages.put(layer, new Layer(new RGBA[this.height][this.width], this));
   }
 
 
-  public void addImageToLayer(String LayerName, String imgName, int height, int width) throws IllegalArgumentException {
+  public void addImageToLayer(String LayerName, String imgName, int yOffset, int xOffset) throws IllegalArgumentException {
     if (imgName == null) {
       throw new IllegalArgumentException("no image is here");
     }
@@ -139,21 +136,49 @@ public class Collage implements ICollage {
       throw new IllegalArgumentException("no image is here");
     }
     if (imgName.endsWith(".ppm")) {
-      RGBA[][] newImage = this.readPPM(imgName);
-      this.knownImages.put(LayerName, new Layer(newImage.length - height,
-              newImage[0].length - width, newImage));
+      Layer newImage = new Layer(this.readPPM(imgName), this);
+      for (int i = yOffset; i < this.height; i++) {
+        for (int j = xOffset; j < this.width; j++) {
+          newImage.getPixelAt(i - yOffset, j - xOffset);
+        }
+      }
+      this.knownImages.put(LayerName, newImage);
     }
   }
 
 
   public void setFilter(String currentLayer, String filterName) {
-    int height = knownImages.get(currentLayer).getHeight();
-    int width = knownImages.get(currentLayer).getWidth();
-    RGBA[][] clone = new RGBA[height][width];
-    for (int y = 0; y < this.height; y++) {
-      for (int x = 0; x < this.width; x++) {
-        this.knownImages.get(currentLayer).applyFilter(currentLayer,
-                clone, this.filterChoice(filterName));
+      RGBA[][] clone = new RGBA[this.height][this.width];
+      for (int y = 0; y < this.height; y++) {
+        for (int x = 0; x < this.width; x++) {
+          this.knownImages.get(currentLayer).applyFilter(clone, this.filterChoice(filterName));
+        }
+      }
+      this.knownImages.put(currentLayer, new Layer(clone, this));
+  }
+
+// find a way to keep track of the previous layer
+  public void save(String file) {
+    if (file.endsWith("ppm")) {
+      try {
+        FileWriter writer = new FileWriter(file);
+        writer.write("P3\n");
+        writer.write(height + " " + width + "\n");
+        writer.write(255 + "\n");
+        for (Layer ly: this.knownImages.values()) {
+          for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+              int red = ly.getPixelAt(y, x).getRed();
+              int green = ly.getPixelAt(y, x).getGreen();
+              int blue = ly.getPixelAt(y, x).getBlue();
+              int alpha = ly.getPixelAt(y, x).getAlpha();
+              writer.write(red + " " + green + " " + blue + " " + alpha + "\n");
+            }
+          }
+        }
+        writer.close();
+      } catch (IOException e) {
+        // catch exception if thrown
       }
     }
   }
@@ -163,10 +188,10 @@ public class Collage implements ICollage {
     switch (filterOption) {
       case "red-component":
         return new FilterRed();
-      case "green-component":
+      /*case "green-component":
         return new FilterGreen();
       case "blue-component":
-        return new FilterBlue();
+        return new FilterBlue();*/
       default:
         return null;
     }

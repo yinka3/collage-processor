@@ -1,9 +1,8 @@
-public class FilterRed implements IFilter {
+public class FilterRed implements IFilter  {
 
 
-
-  public RGBA apply(RGBA rgba) {
-    return new RGBA(0, rgba.getGreen(), 0, rgba.getAlpha());
+  public RGBA apply(RGBA main) {
+    return new RGBA(main.setRed(main.getRed()), 0, 0, main.setAlpha(main.getAlpha()));
   }
 
 }

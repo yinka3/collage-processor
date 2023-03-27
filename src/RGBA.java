@@ -98,22 +98,22 @@ public class RGBA {
   }
 
   // sets the red-component to the value provided
-  int setRed(int newValue) {
+  public int setRed(int newValue) {
     return this.r = newValue;
   }
 
   // sets the blue-component to the value provided
-  int setBlue(int newValue) {
+  public int setBlue(int newValue) {
     return this.b = newValue;
   }
 
   // sets the green-component to the value provided
-  int setGreen(int newValue) {
+  public int setGreen(int newValue) {
     return this.g = newValue;
   }
 
 
-  int setAlpha(int newValue) {return this.a = newValue;}
+  public int setAlpha(int newValue) {return this.a = newValue;}
 
   // returns the max value from the 3 integers given
   public int value(int r, int b, int g) {
@@ -155,4 +155,7 @@ public class RGBA {
     return new RGBA(r, g, b, a_1);
   }
 
+  public RGBA copy() {
+    return new RGBA(this.r, this.g, this.b, this.a);
+  }
 }

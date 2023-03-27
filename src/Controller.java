@@ -35,8 +35,8 @@ public class Controller implements IController, Commands {
 
   @Override
   public void save(String nameOfImage, String path) {
-    Layer img = model.getImage(nameOfImage);
-    img.save(path);
+    model.getLayer(nameOfImage);
+    model.save(path);
     view.renderMessage(nameOfImage
             + " has been saved to " + path + " as a type "
             + "ppm" + ".\n");

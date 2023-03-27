@@ -1,76 +1,37 @@
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.HashMap;
 
 
 public class Layer implements ILayers{
 
-  HashMap<String, RGBA[][]> layers;
-  String layerName;
   private RGBA[][] rgba;
-  private final int width;
-  private final int height;
 
-  IFilter filtered;
-  private Collage layer;
+  private ICollage layer;
+
+  public int height;
+
+  public int width;
 
 
-  public Layer(HashMap<String, RGBA[][]> layers, int width, int height, Collage layer) {
-    this.layers = layers;
-    this.width = width;
-    this.height = height;
-  }
-
-  public Layer(String layerName, int height, int width, RGBA[][] rgba) {
-    this.layerName = layerName;
-    this.width = width;
-    this.height = height;
-    this.rgba = new RGBA[height][width];
-  }
-
-  public Layer(int height, int width, RGBA[][] rgba, Collage pic) {
-    this.width = width;
-    this.height = height;
+  public Layer(RGBA[][] rgba, ICollage pic) {
+    this.height = pic.getHeight();
+    this.width = pic.getWidth();
+    for (int i = 0; i < this.height; i++) {
+      for (int j = 0; j < this.width; j++) {
+        rgba[i][j] = new RGBA(255, 255, 255, 255);
+      }
+    }
     this.rgba = rgba;
     this.layer = pic;
   }
 
-  public Layer(int height, int width, RGBA[][] rgba) {
-    this.width = width;
-    this.height = height;
-    this.rgba = rgba;
-  }
-
-  public Layer(Collage pic) {
-    this.width = 0;
-    this.height = 0;
-    this.rgba = new RGBA[][]{};
-    this.layer = pic;
-  }
-
-
-  // getter for height
-  public int getHeight() {
-    return this.height;
-  }
-
-  // getter for width
-  public int getWidth() {
-    return this.width;
-  }
 
   private boolean isOutOfBounds(int row, int col) {
-    return row < 0 || col < 0 || row > height - 1 || col > width - 1;
+    return row < 0 || col < 0 || row > rgba.length - 1 || col > rgba[0].length - 1;
   }
 
-
-  public void addImage(String newName, RGBA[][] image) {
-    if (!layers.containsKey(newName)) {
-      layers.put(newName, image);
-    } else {
-      layers.replace(newName, image);
-    }
-  }
 
   public RGBA getPixelAt(int row, int col) throws IllegalArgumentException {
     if (isOutOfBounds(row, col)) {
@@ -79,15 +40,22 @@ public class Layer implements ILayers{
     return this.rgba[row][col];
   }
 
-  public void applyFilter(String layerName, RGBA[][] filtered, IFilter filter) {
-    if (!layers.containsKey(layerName)) {
+  public void applyFilter(RGBA[][] filtered, IFilter filter) {
       for (int i = 0; i < this.height; i++) {
         for (int j = 0; j < this.width; j++) {
           filtered[i][j] = filter.apply(filtered[i][j]);
         }
       }
+  }
+
+  public RGBA[][] applyTrans(RGBA[][] prev, RGBA[][] curr) {
+    RGBA[][] finalImage = new RGBA[this.rgba.length][this.rgba[0].length];
+    for (int i = 0; i < this.rgba.length; i++) {
+      for (int j = 0; j < this.rgba[0].length; j++) {
+        finalImage[i][j] = prev[i][j].transparency(curr[i][j]);
+      }
     }
-    this.addImage(layerName, filtered);
+    return finalImage;
   }
 }
 

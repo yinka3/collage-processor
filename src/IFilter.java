@@ -1,4 +1,4 @@
 public interface IFilter {
 
-  RGBA apply (RGBA name);
+  RGBA apply (RGBA main);
 }

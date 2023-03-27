@@ -1,4 +1,4 @@
 public interface CollageView {
 
-  public void renderMessage(String message);
+  void renderMessage(String message);
 }
