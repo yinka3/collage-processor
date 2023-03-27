@@ -1,20 +1,31 @@
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.HashMap;
 
 
-public class Layer {
+public class Layer implements ILayers{
 
+  HashMap<String, RGBA[][]> layers;
   String layerName;
-  private final RGBA[][] rgba;
+  private RGBA[][] rgba;
   private final int width;
   private final int height;
+
+  IFilter filtered;
   private Collage layer;
+
+
+  public Layer(HashMap<String, RGBA[][]> layers, int width, int height, Collage layer) {
+    this.layers = layers;
+    this.width = width;
+    this.height = height;
+  }
 
   public Layer(String layerName, int height, int width, RGBA[][] rgba) {
     this.layerName = layerName;
-    this.rgba = rgba;
     this.width = width;
     this.height = height;
+    this.rgba = new RGBA[height][width];
   }
 
   public Layer(int height, int width, RGBA[][] rgba, Collage pic) {
@@ -37,7 +48,6 @@ public class Layer {
     this.layer = pic;
   }
 
-  public String getName() { return this.layerName; }
 
   // getter for height
   public int getHeight() {
@@ -53,6 +63,15 @@ public class Layer {
     return row < 0 || col < 0 || row > height - 1 || col > width - 1;
   }
 
+
+  public void addImage(String newName, RGBA[][] image) {
+    if (!layers.containsKey(newName)) {
+      layers.put(newName, image);
+    } else {
+      layers.replace(newName, image);
+    }
+  }
+
   public RGBA getPixelAt(int row, int col) throws IllegalArgumentException {
     if (isOutOfBounds(row, col)) {
       throw new IllegalArgumentException("invalid pixel");
@@ -60,27 +79,15 @@ public class Layer {
     return this.rgba[row][col];
   }
 
-  public void save(String file) {
-    if (file.endsWith("ppm")) {
-      try {
-        FileWriter writer = new FileWriter(file);
-        StringBuilder sb = new StringBuilder();
-        for (int y = 0; y < height; y++) {
-          for (int x = 0; x < width; x++) {
-            sb.append(this.getPixelAt(y, x).getRed()).append("\n");
-            sb.append(this.getPixelAt(y, x).getGreen()).append("\n");
-            sb.append(this.getPixelAt(y, x).getBlue()).append("\n");
-          }
+  public void applyFilter(String layerName, RGBA[][] filtered, IFilter filter) {
+    if (!layers.containsKey(layerName)) {
+      for (int i = 0; i < this.height; i++) {
+        for (int j = 0; j < this.width; j++) {
+          filtered[i][j] = filter.apply(filtered[i][j]);
         }
-        writer.write("P3\n");
-        writer.write(height + " " + width + "\n");
-        writer.write(255 + "\n");
-        writer.write(sb.toString());
-        writer.close();
-      } catch (IOException e) {
-        // catch exception if thrown
       }
     }
+    this.addImage(layerName, filtered);
   }
 }
 

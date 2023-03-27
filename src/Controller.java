@@ -44,7 +44,7 @@ public class Controller implements IController, Commands {
 
   @Override
   public void setFilter(String nameOf, String filter) {
-    model.applyFilter(nameOf, filter);
+    model.setFilter(nameOf, filter);
   }
 
   @Override

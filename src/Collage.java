@@ -6,9 +6,11 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
-public class Collage {
+public class Collage implements ICollage {
 
-  private Map<String, Layer> knownImages;
+  String projectName;
+
+  private HashMap<String, Layer> knownImages;
 
   private int height;
 
@@ -22,6 +24,14 @@ public class Collage {
 
   public Collage() {
     this.knownImages = new HashMap<>();
+  }
+
+  public int getWidth() {
+    return width;
+  }
+
+  public int getHeight() {
+    return height;
   }
 
   public void addImage(String newName, Layer image) {
@@ -130,15 +140,20 @@ public class Collage {
     }
     if (imgName.endsWith(".ppm")) {
       RGBA[][] newImage = this.readPPM(imgName);
-      this.knownImages.put(LayerName, new Layer(newImage.length - height, newImage[0].length - width, newImage));
+      this.knownImages.put(LayerName, new Layer(newImage.length - height,
+              newImage[0].length - width, newImage));
     }
   }
 
-  public void applyFilter(String currentLayer, String filterName) {
-    Layer newLayer = this.getImage(currentLayer);
-    for (int y = 0; y < newLayer.getHeight(); y++) {
-      for (int x = 0; x < newLayer.getWidth(); x++) {
-        this.filterChoice(filterName).apply(newLayer.getPixelAt(y, x));
+
+  public void setFilter(String currentLayer, String filterName) {
+    int height = knownImages.get(currentLayer).getHeight();
+    int width = knownImages.get(currentLayer).getWidth();
+    RGBA[][] clone = new RGBA[height][width];
+    for (int y = 0; y < this.height; y++) {
+      for (int x = 0; x < this.width; x++) {
+        this.knownImages.get(currentLayer).applyFilter(currentLayer,
+                clone, this.filterChoice(filterName));
       }
     }
   }
