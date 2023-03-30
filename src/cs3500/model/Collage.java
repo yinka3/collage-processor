@@ -4,13 +4,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Scanner;
-
 import cs3500.Filter.IFilter;
 import cs3500.ImageUtil.Layer;
 import cs3500.ImageUtil.PPMUtil;
 import cs3500.ImageUtil.RGBA;
+
 
 public class Collage implements ICollage {
 

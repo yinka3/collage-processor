@@ -57,9 +57,6 @@ public class Layer {
   }
 
   public RGBA[][] applyFilter(RGBA[][] filtered) {
-   // if (this.filter == null) {
-    //  return filtered;
-   // }
       for (int j = 0; j < this.height; j++) {
         for (int i = 0; i < this.width; i++) {
           filtered[j][i] = this.filter.apply(filtered[j][i]);
@@ -81,18 +78,13 @@ public class Layer {
     RGBA[][] temp = new RGBA[this.height][this.width];
     for (int i = 0; i < this.height; i++) {
       for (int j = 0; j < this.width; j++) {
-        //if (this.rgba2[i][j] == null) {
-          //temp[i][j] = new RGBA(0, 0, 0, 0);
-        //} else {
           temp[i][j] = this.rgba2[i][j].copy();
-        //}
         }
       }
     return temp;
   }
 
   public RGBA[][] visualize() {
-    this.applyAlpha(this.alpha);
     return this.applyFilter(this.getNewRgba2());
   }
 

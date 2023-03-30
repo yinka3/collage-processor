@@ -114,9 +114,14 @@ public class PPMUtil {
 
         for (int y = 0; y < height; y++) {
           for (int x = 0; x < width; x++) {
-            writer.write(this.pixels[y][x].toString() + " ");
+            double alpha = this.pixels[y][x].getAlpha() ;
+            int red = (int) (this.pixels[y][x].getRed() * alpha / 255);
+            int green = (int) (this.pixels[y][x].getGreen() * alpha / 255);
+            int blue = (int) (this.pixels[y][x].getBlue() * alpha / 255);
+            writer.write(red + " " + green + " " + blue + " ");
           }
           writer.println();
+
         }
         writer.close();
       } catch (IOException e) {

@@ -5,7 +5,7 @@ import cs3500.ImageUtil.RGBA;
 public class FilterRed implements IFilter {
 
   public RGBA apply(RGBA input) {
-    return new RGBA(input.getRed(), 0, 0 , 0);
+    return new RGBA(input.getRed(), 0, 0 , input.getAlpha());
   }
 
   @Override
