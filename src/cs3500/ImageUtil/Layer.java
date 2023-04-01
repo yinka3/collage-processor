@@ -65,6 +65,10 @@ public class Layer {
     return filtered;
   }
 
+/*  public RGBA[][] applyBlend(RGBA[][] layer1, RGBA[][] layer2) {
+    for
+  }*/
+
  public void applyAlpha(double alpha) {
     for (int j = 0; j < this.height; j++) {
       for (int i = 0; i < this.width; i++) {
