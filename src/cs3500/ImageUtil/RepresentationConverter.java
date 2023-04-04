@@ -72,8 +72,7 @@ public class RepresentationConverter {
     double r = convertFn(hue, saturation, lightness, 0) * 255;
     double g = convertFn(hue, saturation, lightness, 8) * 255;
     double b = convertFn(hue, saturation, lightness, 4) * 255;
-    return new RGBA((int)r, (int)g, (int)b);
-    //System.out.println("HSL (" + hue + "," + saturation + "," + lightness + ") to RGB => (" + r + "," + g + "," + b + ")");
+    return new RGBA((int) r, (int) g, (int) b);
   }
 
   /*
@@ -86,16 +85,4 @@ public class RepresentationConverter {
 
     return lightness - a * Math.max(-1, Math.min(k - 3, Math.min(9 - k, 1)));
   }
-
-  //demo main
-  public static void main(String[] args) {
-    RepresentationConverter.convertRGBtoHSL(0.0, 0.0, 0.0);
-    RepresentationConverter.convertRGBtoHSL(1.0, 1.0, 1.0);
-    RepresentationConverter.convertRGBtoHSL(1.0, 0.0, 0.0);
-
-    RepresentationConverter.convertHSLtoRGB(14.0, 0.813, 0.624);
-    RepresentationConverter.convertHSLtoRGB(0.0, 1.0, 0.5);
-    RepresentationConverter.convertHSLtoRGB(0.0, 0.0, 1.0);
-  }
-
 }

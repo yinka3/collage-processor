@@ -16,4 +16,8 @@ public class BlendingDifference implements IBlending {
     return comp1 - comp2;
   }
 
+  @Override
+  public String toString() {
+    return "BlendingDifference";
+  }
 }
