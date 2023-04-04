@@ -16,7 +16,6 @@ public class PPMUtil {
   RGBA[][] pixels;
 
   public PPMUtil(String filepath) {
-
     this.file = this.removeExtension(filepath);
     this.readPPM(filepath);
   }
@@ -37,14 +36,6 @@ public class PPMUtil {
   }
 
 
-  public int getHeight() {
-    return height;
-  }
-
-
-  public int getWidth() {
-    return width;
-  }
 
   public String removeExtension(String filePath) {
     String fileName = new File(filePath).getName();

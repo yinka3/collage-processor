@@ -1,21 +1,21 @@
 package cs3500.model;
 
-import java.util.Map;
-
 import cs3500.Filter.IFilter;
-import cs3500.ImageUtil.Layer;
 import cs3500.ImageUtil.RGBA;
 
 public interface ICollage {
 
+  int getHeight();
 
-  //RGBA[][] finalPixel();
+  int getWidth();
+
+  RGBA[][] finalPixel();
 
   void savePPMImage(String filepath);
 
  void saveProject(String filepath);
 
-  ICollage loadProject(String filepath);
+  void loadProject(String filepath);
 
 
   void createProject(int height, int width);

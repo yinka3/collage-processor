@@ -22,7 +22,6 @@ public class Collage implements ICollage {
 
   private boolean isStarted;
 
-
   public Collage() {
     this.isStarted = false;
   }
@@ -36,6 +35,14 @@ public class Collage implements ICollage {
     this.width = width;
     this.knownImages = new HashMap<>();
     this.isStarted = true;
+  }
+
+  public int getHeight() {
+    return height;
+  }
+
+  public int getWidth() {
+    return width;
   }
 
 
@@ -61,6 +68,7 @@ public class Collage implements ICollage {
       throw new IllegalArgumentException("layer name already exists");
     }
   }
+
 
   @Override
   public void addImageToLayer(String LayerName, String imgName, int yOffset, int xOffset) throws IllegalArgumentException {
@@ -134,7 +142,7 @@ public class Collage implements ICollage {
   }
 
   @Override
-  public ICollage loadProject(String filepath) {
+  public void loadProject(String filepath) {
     try {
       File file = new File(filepath);
       Scanner scan = new Scanner(file);
@@ -159,16 +167,12 @@ public class Collage implements ICollage {
         l1.setPixels(pixels);
         project.knownImages.put(layerName, l1);
         project.knownImages.get(layerName).applyAlpha(alpha);
-        //project.updateLayerAlpha(layerName, alpha);
       }
       scan.close();
-      return project;
     } catch (Exception e) {
       throw new IllegalArgumentException(e.getMessage());
-
     }
   }
-
 }
 
 

@@ -1,20 +1,11 @@
 package cs3500.controller;
 
 import java.util.Scanner;
-
-import cs3500.Filter.BrightenByIntensity;
-import cs3500.Filter.BrightenByLuma;
-import cs3500.Filter.BrightenByValue;
-import cs3500.Filter.DarkenByIntensity;
-import cs3500.Filter.DarkenByLuma;
-import cs3500.Filter.DarkenByValue;
-import cs3500.Filter.FilterBlue;
-import cs3500.Filter.FilterGreen;
-import cs3500.Filter.FilterRed;
 import cs3500.Filter.IFilter;
-import cs3500.controller.Commands;
 import cs3500.model.ICollage;
 import cs3500.view.View;
+
+import static cs3500.controller.ControllerGUI.getIFilterName;
 
 public class Controller implements IController, Commands {
 
@@ -24,6 +15,7 @@ public class Controller implements IController, Commands {
   private final Readable readable;
 
   private final View view;
+
 
   public Controller(ICollage model, Readable readable, View view) {
     if ((model == null) || (view == null) || (readable == null)) {
@@ -36,34 +28,17 @@ public class Controller implements IController, Commands {
 
 
   private IFilter filterChoice(String filterOption) {
-    switch (filterOption) {
-      case "red-component":
-        return new FilterRed();
-      case "green-component":
-        return new FilterGreen();
-      case "blue-component":
-        return new FilterBlue();
-      case "darken-intensity":
-        return new DarkenByIntensity();
-      case "darken-luma":
-        return new DarkenByLuma();
-      case "darken-value":
-        return new DarkenByValue();
-      case "brighten-intensity":
-        return new BrightenByIntensity();
-      case "brighten-luma":
-        return new BrightenByLuma();
-      case "brighten-value":
-        return new BrightenByValue();
-      default:
-        return null;
-    }
+    return getIFilterName(filterOption);
   }
 
 
   @Override
-  public void createProject(int height, int width) {
-    this.model.createProject(height, width);
+  public void createProject(String height, String width) {
+    try {
+      this.model.createProject(Integer.parseInt(height), Integer.parseInt(width));
+    } catch (NumberFormatException e) {
+      //do nothing
+    }
   }
 
   @Override
@@ -72,8 +47,12 @@ public class Controller implements IController, Commands {
   }
 
   @Override
-  public void addImageToLayer(String layerName, String imageName, int y, int x) {
-    this.model.addImageToLayer(layerName, imageName, y, x);
+  public void addImageToLayer(String layerName, String imageName, String y, String x) {
+    try {
+      this.model.addImageToLayer(layerName, imageName, Integer.parseInt(y), Integer.parseInt(x));
+    } catch (NumberFormatException e) {
+      //do nothing
+    }
   }
 
   @Override
@@ -109,8 +88,8 @@ public class Controller implements IController, Commands {
             System.exit(0);
             return;
           case "new-project":
-            int width = s.nextInt();
-            int height = s.nextInt();
+            String width = s.next();
+            String height = s.next();
             createProject(height, width);
             view.renderMessage("Done\n");
             break;
@@ -122,8 +101,8 @@ public class Controller implements IController, Commands {
           case "load-image":
             String nameLayer = s.next();
             String imgName = s.next();
-            int yOffset = s.nextInt();
-            int xOffset = s.nextInt();
+            String yOffset = s.next();
+            String xOffset = s.next();
             addImageToLayer(nameLayer, imgName, yOffset, xOffset);
             view.renderMessage("Done\n");
             break;

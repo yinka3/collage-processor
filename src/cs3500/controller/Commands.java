@@ -2,11 +2,11 @@ package cs3500.controller;
 
 public interface Commands {
 
-  void createProject(int height, int width);
+  void createProject(String height, String width);
 
   void addLayer(String name);
 
-  void addImageToLayer(String layerName, String imageName, int y, int x);
+  void addImageToLayer(String layerName, String imageName, String y, String x);
 
   void saveImage(String nameOfImage);
 

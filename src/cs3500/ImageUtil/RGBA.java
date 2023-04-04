@@ -2,9 +2,9 @@ package cs3500.ImageUtil;
 
 public class RGBA {
 
-  private int r;
-  private int g;
-  private int b;
+  private final int r;
+  private final int g;
+  private final int b;
   private double a;
 
 

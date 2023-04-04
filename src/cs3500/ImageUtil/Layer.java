@@ -1,11 +1,12 @@
 package cs3500.ImageUtil;
 
+import cs3500.Filter.FilterNormal;
 import cs3500.Filter.IFilter;
 
 
 public class Layer {
 
-  private RGBA[][] rgba2;
+  private final RGBA[][] rgba2;
 
   public int height;
 
@@ -24,12 +25,14 @@ public class Layer {
     this.width = width;
     this.rgba2 = new RGBA[this.height][this.width];
     this.alpha = 0;
+    this.filter = new FilterNormal();
     for (int y = 0; y < this.height; y++) {
       for (int x = 0; x < this.width; x++) {
         this.rgba2[y][x] = new RGBA(255, 255, 255, 0);
       }
     }
   }
+
 
 
   public String getName() {
@@ -91,6 +94,7 @@ public class Layer {
   public RGBA[][] visualize() {
     return this.applyFilter(this.getNewRgba2());
   }
+
 
   public void addImageToLayer(PPMUtil imgName, int yOffset, int xOffset) {
     if (imgName == null) {
