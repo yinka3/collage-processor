@@ -1,0 +1,9 @@
+new-project 1000 1000
+add-layer yinka
+add-layer abi
+load-image yinka tako.ppm 10 10
+set-filter yinka red-component
+load-image abi ichigo.ppm 200 200
+set-filter abi green-component
+save-image theOne.ppm
+quit
