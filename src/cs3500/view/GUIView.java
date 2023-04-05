@@ -196,8 +196,13 @@ public class GUIView extends JFrame implements GUI, CollageView, ActionListener 
           throw new RuntimeException(e);
          }
          viewMessages.setText(appendable.toString());
+         ImageIcon thumbsUp = new ImageIcon("thumps up.jpg");
+        JOptionPane.showMessageDialog(GUIView.this,
+                new JLabel("You have started a project, now have some fun you idiot.", thumbsUp, JLabel.LEFT), "PROJECT STARTED", JOptionPane.PLAIN_MESSAGE);
          break;
       case "Add Layer":
+        ImageIcon monke = new ImageIcon("monke2.jpg");
+        JOptionPane.showMessageDialog(GUIView.this, new JLabel(monke, JLabel.LEFT), "GIVE LAYER", JOptionPane.PLAIN_MESSAGE);
         String layerName = JOptionPane.showInputDialog("Give me layer name");
         this.commands.addLayer(layerName);
         try {
@@ -229,15 +234,7 @@ public class GUIView extends JFrame implements GUI, CollageView, ActionListener 
             firstName.setEditable(true);
             firstName.setVisible(true);
           }
-          try {
-            this.appendable.append("A new image ").append(" has been added to layer ").append(loadName.getText()).append("\n");
-            this.appendable.append("The new image").append(" has offset by ").
-                    append(heightImage).append(" height and ").append("width by ").append(widthImage).append("\n");
-          } catch (IOException e) {
-            throw new RuntimeException(e);
-          }
         }
-        viewMessages.setText(appendable.toString());
         break;
       case "Save a ppm file":
         final JFileChooser fchooser2 = new JFileChooser(".");
@@ -369,6 +366,39 @@ public class GUIView extends JFrame implements GUI, CollageView, ActionListener 
               }
               try {
                 this.appendable.append("The layer ").append(firstName.getText()).append(" has been darkenbyvalue\n");
+              } catch (IOException e) {
+                throw new RuntimeException(e);
+              }
+              viewMessages.setText(appendable.toString());
+              break;
+            case "blendingbrighten":
+              if (!firstName.getText().equals("")) {
+                this.commands.setBlend(firstName.getText(), "BlendingBrighten");
+              }
+              try {
+                this.appendable.append("The layer ").append(firstName.getText()).append(" has been blendingbrighten\n");
+              } catch (IOException e) {
+                throw new RuntimeException(e);
+              }
+              viewMessages.setText(appendable.toString());
+              break;
+            case "blendingdarken":
+              if (!firstName.getText().equals("")) {
+                this.commands.setBlend(firstName.getText(), "BlendingDarken");
+              }
+              try {
+                this.appendable.append("The layer ").append(firstName.getText()).append(" has been blendingdarken\n");
+              } catch (IOException e) {
+                throw new RuntimeException(e);
+              }
+              viewMessages.setText(appendable.toString());
+              break;
+            case "blendingdifference":
+              if (!firstName.getText().equals("")) {
+                this.commands.setBlend(firstName.getText(), "BlendingDifference");
+              }
+              try {
+                this.appendable.append("The layer ").append(firstName.getText()).append(" has been blendingdifference\n");
               } catch (IOException e) {
                 throw new RuntimeException(e);
               }

@@ -3,7 +3,6 @@ package cs3500.ImageUtil;
 /**
  * This class contains utility methods to convert an RGB representation
  * to HSL and back and print those results.
- * Feel free to change these methods as required.
  */
 public class RepresentationConverter {
 
@@ -21,6 +20,7 @@ public class RepresentationConverter {
    * @param b blue value of the RGB between 0 and 1
    */
   public static HSL convertRGBtoHSL(double r, double g, double b) {
+
     double componentMax = Math.max(r, Math.max(g, b));
     double componentMin = Math.min(r, Math.min(g, b));
     double delta = componentMax - componentMin;
@@ -62,17 +62,18 @@ public class RepresentationConverter {
    * <li> 0 &lt;= L &lt;= 1</li>
    * </ul>
    * into an RGB representation where each component is in the range 0-1
+   *  @param hue        hue of the HSL representation
    *
-   * @param hue        hue of the HSL representation
    * @param saturation saturation of the HSL representation
    * @param lightness  lightness of the HSL representation
+   * @param alpha
    */
 
-  public static RGBA convertHSLtoRGB(double hue, double saturation, double lightness) {
+  public static RGBA convertHSLtoRGB(double hue, double saturation, double lightness, double alpha) {
     double r = convertFn(hue, saturation, lightness, 0) * 255;
     double g = convertFn(hue, saturation, lightness, 8) * 255;
     double b = convertFn(hue, saturation, lightness, 4) * 255;
-    return new RGBA((int) r, (int) g, (int) b);
+    return new RGBA((int) r, (int) g, (int) b, alpha);
   }
 
   /*
@@ -82,7 +83,7 @@ public class RepresentationConverter {
   private static double convertFn(double hue, double saturation, double lightness, int n) {
     double k = (n + (hue / 30)) % 12;
     double a = saturation * Math.min(lightness, 1 - lightness);
-
     return lightness - a * Math.max(-1, Math.min(k - 3, Math.min(9 - k, 1)));
   }
+
 }

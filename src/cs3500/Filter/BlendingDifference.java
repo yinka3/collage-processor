@@ -6,14 +6,10 @@ public class BlendingDifference implements IBlending {
 
   @Override
   public RGBA apply(RGBA rgba1, RGBA rgba2) {
-    int newRed = applyComp(rgba1.getRed(), rgba2.getRed());
-    int newGreen = applyComp(rgba1.getGreen(), rgba2.getRed());
-    int newBlue = applyComp(rgba1.getRed(), rgba2.getRed());
-    return new RGBA(newRed, newGreen, newBlue);
-  }
-
-  private int applyComp(int comp1, int comp2) {
-    return comp1 - comp2;
+    int newRed = Math.abs(rgba1.getRed() - rgba2.getRed());
+    int newGreen = Math.abs(rgba1.getGreen() - rgba2.getGreen());
+    int newBlue = Math.abs(rgba1.getBlue() - rgba2.getBlue());
+    return new RGBA(newRed, newGreen, newBlue, rgba1.getAlpha());
   }
 
   @Override

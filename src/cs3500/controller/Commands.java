@@ -14,6 +14,8 @@ public interface Commands {
 
   void setFilter(String name, String filter);
 
+  void setBlend(String currentLayer,  String blend);
+
   void loadProject(String filename);
 
 }

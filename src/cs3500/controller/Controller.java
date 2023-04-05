@@ -1,6 +1,14 @@
 package cs3500.controller;
 
 import java.util.Scanner;
+
+import cs3500.Filter.BlendingBrighten;
+import cs3500.Filter.BlendingDarken;
+import cs3500.Filter.BlendingDifference;
+import cs3500.Filter.FilterBlue;
+import cs3500.Filter.FilterGreen;
+import cs3500.Filter.FilterRed;
+import cs3500.Filter.IBlending;
 import cs3500.Filter.IFilter;
 import cs3500.model.ICollage;
 import cs3500.view.View;
@@ -29,6 +37,23 @@ public class Controller implements IController, Commands {
 
   private IFilter filterChoice(String filterOption) {
     return getIFilterName(filterOption);
+  }
+
+  private IBlending getIBlenderName(String blenderOption) {
+    return getiBlending(blenderOption);
+  }
+
+  static IBlending getiBlending(String blenderOption) {
+    switch (blenderOption) {
+      case "BlendingBrighten":
+        return new BlendingBrighten();
+      case "BlendingDarken":
+        return new BlendingDarken();
+      case "BlendingDifference":
+        return new BlendingDifference();
+      default:
+        return null;
+    }
   }
 
 
@@ -68,6 +93,11 @@ public class Controller implements IController, Commands {
   @Override
   public void setFilter(String name, String filter) {
     this.model.setFilter(name, this.filterChoice(filter));
+  }
+
+ @Override
+  public void setBlend(String layerName, String blend) {
+    this.model.setBlend(layerName, this.getIBlenderName(blend));
   }
 
   @Override
@@ -112,6 +142,11 @@ public class Controller implements IController, Commands {
             setFilter(name, filter);
             view.renderMessage("Done\n");
             break;
+          case "set-blend":
+            String currLayer = s.next();
+            String blendChoice = s.next();
+            setBlend(currLayer, blendChoice);
+            view.renderMessage("Done\n");
           case "save-image":
             String nameOfImage = s.next();
             saveImage(nameOfImage);

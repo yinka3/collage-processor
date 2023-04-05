@@ -2,6 +2,9 @@ package cs3500.controller;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import cs3500.Filter.BlendingBrighten;
+import cs3500.Filter.BlendingDarken;
+import cs3500.Filter.BlendingDifference;
 import cs3500.Filter.BrightenByIntensity;
 import cs3500.Filter.BrightenByLuma;
 import cs3500.Filter.BrightenByValue;
@@ -11,10 +14,13 @@ import cs3500.Filter.DarkenByValue;
 import cs3500.Filter.FilterBlue;
 import cs3500.Filter.FilterGreen;
 import cs3500.Filter.FilterRed;
+import cs3500.Filter.IBlending;
 import cs3500.Filter.IFilter;
 import cs3500.ImageUtil.RGBA;
 import cs3500.model.ICollage;
 import cs3500.view.GUIView;
+
+import static cs3500.controller.Controller.getiBlending;
 
 public class ControllerGUI implements Commands {
 
@@ -32,6 +38,11 @@ public class ControllerGUI implements Commands {
   private IFilter filterChoice(String filterOption) {
     return getIFilterName(filterOption);
   }
+
+  private IBlending getIBlenderName(String blenderOption) {
+    return getiBlending(blenderOption);
+  }
+
 
   static IFilter getIFilterName(String filterOption) {
     switch (filterOption) {
@@ -103,6 +114,14 @@ public class ControllerGUI implements Commands {
     guiView.repaint();
   }
 
+
+  @Override
+  public void setBlend(String layerName, String blend) {
+    this.model.setBlend(layerName, this.getIBlenderName(blend));
+    guiView.refreshImage(this.getImage());
+    guiView.repaint();
+  }
+
   @Override
   public void loadProject(String filename) {
     this.model.loadProject(filename);
@@ -116,9 +135,10 @@ public class ControllerGUI implements Commands {
             this.model.getHeight(), BufferedImage.TYPE_INT_RGB);
     for (int y = 0; y < this.model.getHeight(); y++) {
       for (int x = 0; x < this.model.getWidth(); x++) {
-        int r = pixels[y][x].getRed();
-        int g = pixels[y][x].getGreen();
-        int b = pixels[y][x].getBlue();
+        double a = pixels[y][x].getAlpha();
+        int r = (int) (pixels[y][x].getRed() * a / 255);
+        int g = (int) (pixels[y][x].getGreen() * a / 255);
+        int b = (int) (pixels[y][x].getBlue() * a / 255);
         Color c = new Color(r, g, b);
         img.setRGB(x, y, c.getRGB());
       }

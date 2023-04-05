@@ -1,5 +1,6 @@
 package cs3500.model;
 
+import cs3500.Filter.IBlending;
 import cs3500.Filter.IFilter;
 import cs3500.ImageUtil.RGBA;
 
@@ -17,6 +18,7 @@ public interface ICollage {
 
   void loadProject(String filepath);
 
+  void setBlend(String layerName, IBlending blend);
 
   void createProject(int height, int width);
 
