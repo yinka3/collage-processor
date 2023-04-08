@@ -1,4 +1,4 @@
-package cs3500.ImageUtil;
+package cs3500.imageutil;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -159,28 +159,27 @@ public class PPMUtil {
    * @param filepath the path to be saved as.
    */
   public void savePPM(String filepath) {
-      try {
-        PrintWriter writer = new PrintWriter(new FileOutputStream(filepath));
+    try {
+      PrintWriter writer = new PrintWriter(new FileOutputStream(filepath));
+      writer.write("P3\n");
+      writer.write(this.width + " " + this.height + "\n");
+      writer.write("255\n");
 
-        writer.write("P3\n");
-        writer.write(this.width + " " + this.height + "\n");
-        writer.write("255\n");
-
-        for (int y = 0; y < height; y++) {
-          for (int x = 0; x < width; x++) {
-            double alpha = this.pixels[y][x].getAlpha() ;
-            int red = (int) (this.pixels[y][x].getRed() * alpha / 255);
-            int green = (int) (this.pixels[y][x].getGreen() * alpha / 255);
-            int blue = (int) (this.pixels[y][x].getBlue() * alpha / 255);
-            writer.write(red + " " + green + " " + blue + " ");
-          }
-          writer.println();
-
+      for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+          double alpha = this.pixels[y][x].getAlpha() ;
+          int red = (int) (this.pixels[y][x].getRed() * alpha / 255);
+          int green = (int) (this.pixels[y][x].getGreen() * alpha / 255);
+          int blue = (int) (this.pixels[y][x].getBlue() * alpha / 255);
+          writer.write(red + " " + green + " " + blue + " ");
         }
-        writer.close();
-        // throws IOException if something goes wrong with the saving process.
-      } catch (IOException e) {
-        throw new IllegalArgumentException("Error saving file: " + e.getMessage());
+        writer.println();
+
       }
+      writer.close();
+      // throws IOException if something goes wrong with the saving process.
+    } catch (IOException e) {
+      throw new IllegalArgumentException("Error saving file: " + e.getMessage());
     }
   }
+}

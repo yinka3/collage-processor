@@ -1,7 +1,13 @@
-package cs3500.Filter;
+package cs3500.filter;
 
-import cs3500.ImageUtil.*;
+import cs3500.imageutil.RGBA;
 
+/**
+ * This filter is used to take the layers underneath a certain layer and have a composite image to
+ * apply this filter to. The effect gives an inversion effect to the layers.
+ * It implements the IBlending interface that gives the main method of applying this to two
+ * different rgba components.
+ */
 public class BlendingDifference implements IBlending {
 
   @Override

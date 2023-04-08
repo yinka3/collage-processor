@@ -1,8 +1,8 @@
-package cs3500.ImageUtil;
+package cs3500.imageutil;
 
-import cs3500.Filter.FilterNormal;
-import cs3500.Filter.IBlending;
-import cs3500.Filter.IFilter;
+import cs3500.filter.FilterNormal;
+import cs3500.filter.IBlending;
+import cs3500.filter.IFilter;
 
 /**
  * The layer class is essentially where the 2D array of pixels gets modified based on the
@@ -68,11 +68,7 @@ public class Layer {
    * the pixels of the layer.
    * @param pixels the 2D array of pixels that are being copied.
    */
-  public void setPixels(RGBA[][] pixels) {
-    if (pixels.length != this.height || pixels[0].length != this.width) {
-      throw new IllegalArgumentException("invalid pixel set in layer");
-    }
-
+  public void setRGBA(RGBA[][] pixels) {
     for (int i = 0; i < this.height; i++) {
       for (int j = 0; j < this.width; j++) {
         this.rgba2[i][j] = pixels[i][j].copy();
@@ -102,11 +98,11 @@ public class Layer {
    * @return a new 2D array onto the layer that are filtered.
    */
   public RGBA[][] getFilter(RGBA[][] filtered) {
-      for (int j = 0; j < this.height; j++) {
-        for (int i = 0; i < this.width; i++) {
-          filtered[j][i] = this.filter.apply(filtered[j][i]);
-        }
+    for (int j = 0; j < this.height; j++) {
+      for (int i = 0; i < this.width; i++) {
+        filtered[j][i] = this.filter.apply(filtered[j][i]);
       }
+    }
     return filtered;
   }
 
@@ -134,14 +130,14 @@ public class Layer {
     RGBA[][] temp = new RGBA[this.height][this.width];
     for (int i = 0; i < this.height; i++) {
       for (int j = 0; j < this.width; j++) {
-          temp[i][j] = this.rgba2[i][j].copy();
-        }
+        temp[i][j] = this.rgba2[i][j].copy();
       }
+    }
     return temp;
   }
 
   /**
-   * This is used to render out a visual of the filtered 2D array of pixels of the layer
+   * This is used to render out a visual of the filtered 2D array of pixels of the layer.
    * @return a filtered 2D array of pixels of the layer
    */
   public RGBA[][] visualize() {
@@ -155,7 +151,7 @@ public class Layer {
    * @param yOffset integer of the offset position of the y coordinate.
    * @param xOffset integer of the offset position of the x coordinate.
    */
-  public void addImageToLayer(PPMUtil imgName, int yOffset, int xOffset) {
+  public void addImage(PPMUtil imgName, int yOffset, int xOffset) {
     if (imgName == null) {
       throw new IllegalArgumentException("no image is here");
     }

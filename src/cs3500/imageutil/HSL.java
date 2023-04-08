@@ -1,4 +1,4 @@
-package cs3500.ImageUtil;
+package cs3500.imageutil;
 
 /**
  * The HSL class is a representation of another form of pixels that can be used,
@@ -23,6 +23,23 @@ public class HSL {
     this.light = clampLight(light);
   }
 
+  /**
+   * Constructs a new HSL with an RGBA.
+   * @param rgba RGBA being converted into an HSL.
+   */
+  public HSL(RGBA rgba) {
+    this.hue =
+            RepresentationConverter.convertRGBToHSL(rgba.getRed(), rgba.getGreen(),
+                    rgba.getBlue()).hue;
+    this.saturation =
+            RepresentationConverter.convertRGBToHSL(rgba.getRed(), rgba.getGreen(),
+                    rgba.getBlue()).saturation;
+    this.light =
+            RepresentationConverter.convertRGBToHSL(rgba.getRed(), rgba.getGreen(),
+                    rgba.getBlue()).light;
+
+
+  }
 
   /**
    * This is a getter method for the hue field.

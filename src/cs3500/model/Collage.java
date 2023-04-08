@@ -3,14 +3,17 @@ package cs3500.model;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Scanner;
-import cs3500.Filter.IBlending;
-import cs3500.Filter.IFilter;
-import cs3500.ImageUtil.Layer;
-import cs3500.ImageUtil.PPMUtil;
-import cs3500.ImageUtil.RGBA;
+import java.util.Set;
+
+import cs3500.filter.IBlending;
+import cs3500.filter.IFilter;
+import cs3500.imageutil.Layer;
+import cs3500.imageutil.PPMUtil;
+import cs3500.imageutil.RGBA;
 
 
 /**
@@ -40,8 +43,9 @@ public class Collage implements ICollage {
   /**
    * This initializes the collage project to be started and creates an empty collage with
    * a specified height and width.
+   *
    * @param height is the integer height of the collage.
-   * @param width is the integer width of the collage.
+   * @param width  is the integer width of the collage.
    */
   public void createProject(int height, int width) {
     if (this.isStarted) {
@@ -55,6 +59,7 @@ public class Collage implements ICollage {
 
   /**
    * This is a getter method for the height of the collage.
+   *
    * @return the height of the collage.
    */
   public int getHeight() {
@@ -63,6 +68,7 @@ public class Collage implements ICollage {
 
   /**
    * This is a getter method for the width of the collage.
+   *
    * @return the width of the collage.
    */
   public int getWidth() {
@@ -72,12 +78,13 @@ public class Collage implements ICollage {
   /**
    * This is the transparency method for the collage that allows for the images to be combined,
    * however it also allows for a possibility for blending filter to be applied.
-   * @param curr is the 2D array of pixels of the current layer.
-   * @param bg is the 2D array of pixels of the background layer.
+   *
+   * @param curr  is the 2D array of pixels of the current layer.
+   * @param bg    is the 2D array of pixels of the background layer.
    * @param blend is the blending filter to be used on the combined layers.
    * @return a 2D array of pixels of combined layers.
    */
-  public RGBA[][] applyTrans(RGBA[][] curr, RGBA[][] bg, IBlending blend) {
+  private RGBA[][] applyTrans(RGBA[][] curr, RGBA[][] bg, IBlending blend) {
     RGBA[][] finalImage = new RGBA[this.height][this.width];
     for (int j = 0; j < this.height; j++) {
       for (int i = 0; i < this.width; i++) {
@@ -94,9 +101,10 @@ public class Collage implements ICollage {
 
   /**
    * This method adds a new empty layer to the collage.
+   *
    * @param layer is the String name of the layer.
    * @throws IllegalArgumentException if the layer name already exists in the collage.
-   * @throws IllegalStateException if you add a layer before starting a project.
+   * @throws IllegalStateException    if you add a layer before starting a project.
    */
   public void addLayer(String layer) throws IllegalArgumentException, IllegalStateException {
     if (!this.isStarted) {
@@ -112,45 +120,56 @@ public class Collage implements ICollage {
 
 
   /**
+   * Adds an image to a layer at specified offset cartesian coordinates in the layer.
    *
-   * @param LayerName
-   * @param imgName
-   * @param yOffset
-   * @param xOffset
-   * @throws IllegalArgumentException
+   * @param layerName the layer being added to.
+   * @param imgName   image being added.
+   * @param yOffset   y placement of the image onto the layer.
+   * @param xOffset   x placement of the image onto the layer.
+   * @throws IllegalArgumentException if the project has not started before placing an image.
    */
   @Override
-  public void addImageToLayer(String LayerName, String imgName, int yOffset, int xOffset) throws IllegalArgumentException {
+  public void addImageToLayer(String layerName, String imgName, int yOffset, int xOffset)
+          throws IllegalArgumentException {
     if (!this.isStarted) {
       throw new IllegalStateException("project has not started");
     }
 
-    this.knownImages.get(LayerName).addImageToLayer(new PPMUtil(imgName), yOffset, xOffset);
+    this.knownImages.get(layerName).addImage(new PPMUtil(imgName), yOffset, xOffset);
   }
 
-
- public RGBA[][] finalPixel() {
-   if (!this.isStarted) {
-     throw new IllegalStateException("project has not started");
-   }
-   RGBA[][] finalImage = new RGBA[this.height][this.width];
-   for (int i = 0; i < this.height; i++) {
-     for (int j = 0; j < this.width; j++) {
-       finalImage[i][j] = new RGBA(0, 0, 0, 0);
-     }
-   }
-   for (Layer layer : this.knownImages.values()) {
-     finalImage = this.applyTrans(layer.visualize(), finalImage, layer.getBlend());
-   }
-   return finalImage;
- }
+  /**
+   * Returns the final RGBAs that make up a layer with commands applied.
+   *
+   * @return a 2d array of RGBAs that make up a composite image of all the layers.
+   */
+  public RGBA[][] finalPixel() {
+    if (!this.isStarted) {
+      throw new IllegalStateException("project has not started");
+    }
+    RGBA[][] finalImage = new RGBA[this.height][this.width];
+    for (int i = 0; i < this.height; i++) {
+      for (int j = 0; j < this.width; j++) {
+        finalImage[i][j] = new RGBA(0, 0, 0, 0);
+      }
+    }
+    for (Layer layer : this.knownImages.values()) {
+      finalImage = this.applyTrans(layer.visualize(), finalImage, layer.getBlend());
+    }
+    return finalImage;
+  }
 
 
   public void savePPMImage(String filepath) {
     new PPMUtil(this.finalPixel(), filepath, this.height, this.width).savePPM(filepath);
   }
 
-
+  /**
+   * Sets a filter option to the given layer based on the layer name.
+   *
+   * @param currentLayer the layer the filter is being added to.
+   * @param filterName   the filter being added.
+   */
   public void setFilter(String currentLayer, IFilter filterName) {
     if (!this.isStarted) {
       throw new IllegalStateException("project has not started");
@@ -158,15 +177,24 @@ public class Collage implements ICollage {
     this.knownImages.get(currentLayer).setFilter(filterName);
   }
 
+  /**
+   * Sets a blend filter to all the layers below from a given layer name.
+   *
+   * @param currentLayer name of the layer the blend is applied to.
+   * @param blend        the blend being applied.
+   */
+  public void setBlend(String currentLayer, IBlending blend) {
+    if (!this.isStarted) {
+      throw new IllegalStateException("project has not started");
+    }
+    this.knownImages.get(currentLayer).setBlend(blend);
+  }
 
- public void setBlend(String currentLayer, IBlending blend) {
-   if (!this.isStarted) {
-     throw new IllegalStateException("project has not started");
-   }
-   this.knownImages.get(currentLayer).setBlend(blend);
- }
-
-
+  /**
+   * Saves a project to a given filepath.
+   *
+   * @param filepath the filepath the project will be saved to.
+   */
   public void saveProject(String filepath) {
     if (!this.isStarted) {
       throw new IllegalStateException("project has not started");
@@ -210,7 +238,6 @@ public class Collage implements ICollage {
       project.createProject(height, width);
       while (scan.hasNextLine()) {
         String layerName = scan.nextLine();
-        double alpha = scan.nextInt();
         RGBA[][] pixels = new RGBA[height][width];
         for (int i = 0; i < height; i++) {
           for (int j = 0; j < width; j++) {
@@ -222,7 +249,7 @@ public class Collage implements ICollage {
           }
         }
         Layer l1 = new Layer(layerName, height, width);
-        l1.setPixels(pixels);
+        l1.setRGBA(pixels);
         project.knownImages.put(layerName, l1);
       }
       scan.close();
@@ -230,7 +257,19 @@ public class Collage implements ICollage {
       throw new IllegalArgumentException(e.getMessage());
     }
   }
+
+  /**
+   * Returns a map of strings to layers of the layers in the project.
+   *
+   * @return a string key to layer value hashmap.
+   */
+  public Map<String, Layer> getKnownImages() {
+    Map<String, Layer> copy = new HashMap<>();
+    Set<Map.Entry<String, Layer>> entries = knownImages.entrySet();
+
+    for (Map.Entry<String, Layer> mapEntry : entries) {
+      copy.put(mapEntry.getKey(), mapEntry.getValue());
+    }
+    return copy;
+  }
 }
-
-
-

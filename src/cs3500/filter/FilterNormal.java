@@ -1,7 +1,11 @@
-package cs3500.Filter;
+package cs3500.filter;
 
-import cs3500.ImageUtil.RGBA;
+import cs3500.imageutil.RGBA;
 
+/**
+ * A filter that does not change a pixel.
+ * Implements the IFilter interface.
+ */
 public class FilterNormal implements IFilter {
 
   @Override

@@ -1,4 +1,4 @@
-package cs3500.ImageUtil;
+package cs3500.imageutil;
 
 /**
  * The RGBA class holds the entity of a pixel for an image,
@@ -11,7 +11,7 @@ public class RGBA {
   private final int r;
   private final int g;
   private final int b;
-  private double a;
+  private final double a;
 
 
   /**
@@ -28,11 +28,11 @@ public class RGBA {
             || r < 0 || g < 0 || b < 0 || a < 0) {
       throw new IllegalArgumentException("invalid pixel");
     }
-      this.r = r;
-      this.g = g;
-      this.b = b;
-      this.a = a;
-    }
+    this.r = r;
+    this.g = g;
+    this.b = b;
+    this.a = a;
+  }
 
   /**
    * This is the constructor used for needing to acquire only the red, green, and blue
@@ -48,22 +48,23 @@ public class RGBA {
             || r < 0 || g < 0 || b < 0) {
       throw new IllegalArgumentException("invalid pixel");
     }
-      this.r = r;
-      this.g = g;
-      this.b = b;
-      this.a = 255;
-    }
+    this.r = r;
+    this.g = g;
+    this.b = b;
+    this.a = 255;
+  }
 
   /**
    *  This is a convenience constructor for having to return an RGBA with the use of an HSL
    *  component, a new implementation we used.
-    * @param hsl is the HSL class, which is a new version of a pixel.
+   * @param hsl is the HSL class, which is a new version of a pixel.
    */
   public RGBA(HSL hsl) {
-    RGBA temp = RepresentationConverter.convertHSLtoRGB(hsl.getHue(), hsl.getSaturation(), hsl.getLight(), this.getAlpha());
+    RGBA temp = RepresentationConverter.convertHSLToRGB(hsl.getHue(),
+            hsl.getSaturation(), hsl.getLight(), this.getAlpha());
     this.r = clamp(temp.getRed());
     this.g = clamp(temp.getGreen());
-    this.b = clamp (temp.getBlue());
+    this.b = clamp(temp.getBlue());
     this.a = clamp((int) temp.getAlpha());
   }
 
@@ -101,7 +102,7 @@ public class RGBA {
 
   /**
    * This is the value method, which is used later to filter photos.
-   * It gets the max value of each RGB component.
+   * It gets the max value of out an RGB component.
    * @param r is the red component of the pixel.
    * @param b is the blue component of the pixel.
    * @param g is the green component of the pixel.
@@ -114,10 +115,11 @@ public class RGBA {
 
   /**
    * This is the luma value method, which is used later to filter photos.
+   * It multiplies each RGB component by certain values.
    * @param r is the red component of the pixel.
    * @param b is the blue component of the pixel.
    * @param g is the green component of the pixel.
-   * @return the RGB components modified to certain parameters.
+   * @return the sum of RGB components modified to certain parameters.
    */
   public double luma(int r, int b, int g) {
     return 0.2126 * r + 0.7152 * g + 0.0722 * b;
@@ -128,8 +130,7 @@ public class RGBA {
    * @param r is the red component of the pixel.
    * @param b is the blue component of the pixel.
    * @param g is the green component of the pixel.
-   * @return an int number of which is takes the RGB components, adds them together and divides
-   * them by 3.
+   * @return an int number of which is takes the average of the RGB components.
    */
   public int intensity(int r, int b, int g) {
     return (r + b + g) / 3;
@@ -138,7 +139,7 @@ public class RGBA {
   /**
    * The clamp method is used to make sure when calculates are made with RGBA components, they
    * stay between 0 and 255.
-   * @param value the value compare for clmamping.
+   * @param value the value compare for clamping.
    * @return value based on how the value is clamped.
    */
   public static int clamp(int value) {
@@ -181,8 +182,7 @@ public class RGBA {
 
   /**
    * The method is a to String override meant for this class.
-   * @return a string representation of the RGBA object of just the
-   * red, green, and blue values.
+   * @return a string representation of the RGBA object of just the red, green, and blue values.
    */
   @Override
   public String toString() {

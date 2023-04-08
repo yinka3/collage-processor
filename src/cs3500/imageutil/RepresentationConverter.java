@@ -1,4 +1,4 @@
-package cs3500.ImageUtil;
+package cs3500.imageutil;
 
 /**
  * This class contains utility methods to convert an RGB representation
@@ -8,7 +8,7 @@ public class RepresentationConverter {
 
   /**
    * Converts an RGB representation in the range 0-1 into an HSL
-   * representation where
+   * representation where.
    * <ul>
    * <li> 0 &lt;= H &lt; 360</li>
    * <li> 0 &lt;= S &lt;= 1</li>
@@ -19,14 +19,15 @@ public class RepresentationConverter {
    * @param g green value of the RGB between 0 and 1
    * @param b blue value of the RGB between 0 and 1
    */
-  public static HSL convertRGBtoHSL(double r, double g, double b) {
+  public static HSL convertRGBToHSL(double r, double g, double b) {
 
     double componentMax = Math.max(r, Math.max(g, b));
     double componentMin = Math.min(r, Math.min(g, b));
     double delta = componentMax - componentMin;
 
     double lightness = (componentMax + componentMin) / 2;
-    double hue, saturation;
+    double hue;
+    double saturation;
     if (delta == 0) {
       hue = 0;
       saturation = 0;
@@ -55,21 +56,21 @@ public class RepresentationConverter {
 
 
   /**
-   * Convers an HSL representation where
+   * Converts an HSL representation where
    * <ul>
    * <li> 0 &lt;= H &lt; 360</li>
    * <li> 0 &lt;= S &lt;= 1</li>
    * <li> 0 &lt;= L &lt;= 1</li>
    * </ul>
-   * into an RGB representation where each component is in the range 0-1
-   *  @param hue        hue of the HSL representation
-   *
+   * into an RGB representation where each component is in the range 0-1.
+   * @param hue hue of the HSL representation
    * @param saturation saturation of the HSL representation
    * @param lightness  lightness of the HSL representation
-   * @param alpha
+   * @param alpha how transparent the HSL representation should be
    */
 
-  public static RGBA convertHSLtoRGB(double hue, double saturation, double lightness, double alpha) {
+  public static RGBA convertHSLToRGB(double hue, double saturation, double lightness,
+                                     double alpha) {
     double r = convertFn(hue, saturation, lightness, 0) * 255;
     double g = convertFn(hue, saturation, lightness, 8) * 255;
     double b = convertFn(hue, saturation, lightness, 4) * 255;

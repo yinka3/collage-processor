@@ -1,27 +1,30 @@
 package cs3500.controller;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
-import cs3500.Filter.BlendingBrighten;
-import cs3500.Filter.BlendingDarken;
-import cs3500.Filter.BlendingDifference;
-import cs3500.Filter.BrightenByIntensity;
-import cs3500.Filter.BrightenByLuma;
-import cs3500.Filter.BrightenByValue;
-import cs3500.Filter.DarkenByIntensity;
-import cs3500.Filter.DarkenByLuma;
-import cs3500.Filter.DarkenByValue;
-import cs3500.Filter.FilterBlue;
-import cs3500.Filter.FilterGreen;
-import cs3500.Filter.FilterRed;
-import cs3500.Filter.IBlending;
-import cs3500.Filter.IFilter;
-import cs3500.ImageUtil.RGBA;
+import cs3500.filter.BrightenByIntensity;
+import cs3500.filter.BrightenByLuma;
+import cs3500.filter.BrightenByValue;
+import cs3500.filter.DarkenByIntensity;
+import cs3500.filter.DarkenByLuma;
+import cs3500.filter.DarkenByValue;
+import cs3500.filter.FilterBlue;
+import cs3500.filter.FilterGreen;
+import cs3500.filter.FilterRed;
+import cs3500.filter.IBlending;
+import cs3500.filter.IFilter;
+import cs3500.imageutil.RGBA;
 import cs3500.model.ICollage;
 import cs3500.view.GUIView;
 
 import static cs3500.controller.Controller.getiBlending;
 
+/**
+ * This class handles the commands that will be used in the GUI class, allowing for clean
+ * access of the commands made by the model to be used in the GUI.
+ * Implements the commands interface for that purpose.
+ */
 public class ControllerGUI implements Commands {
 
   private GUIView guiView;
@@ -34,16 +37,29 @@ public class ControllerGUI implements Commands {
     this.model = image;
   }
 
-
+  /**
+   * This is a getter method to get the filter choice based off a string.
+   * @param filterOption the string representation of the filter option.
+   * @return the actual filter option that can modify the layer.
+   */
   private IFilter filterChoice(String filterOption) {
     return getIFilterName(filterOption);
   }
 
+  /**
+   * This is a getter method to get the blender choice based off a string.
+   * @param blenderOption the string representation of the blender option.
+   * @return the actual blender option that can modify the layer.
+   */
   private IBlending getIBlenderName(String blenderOption) {
     return getiBlending(blenderOption);
   }
 
-
+  /**
+   * Allows to get filter option from string.
+   * @param filterOption the string to be used for comparison of filters.
+   * @return the actual filter option.
+   */
   static IFilter getIFilterName(String filterOption) {
     switch (filterOption) {
       case "red-component":
@@ -129,6 +145,11 @@ public class ControllerGUI implements Commands {
     guiView.refresh();
   }
 
+  /**
+   * This method is used for displaying a 2D array of pixels as a buffered image,
+   * this will be helpful visualization of an image in the GUI.
+   * @return a buffered image of the 2D array of pixels.
+   */
   public Image getImage() {
     RGBA[][] pixels = this.model.finalPixel();
     BufferedImage img = new BufferedImage(this.model.getWidth(),

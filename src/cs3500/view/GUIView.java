@@ -1,40 +1,63 @@
 package cs3500.view;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
-import javax.swing.*;
+
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
 import cs3500.controller.Commands;
 
-
+/**
+ * This class represents the Graphical User Interface that allows for the user to visually see
+ * all the changes their inputs make in the program.
+ * The class extends the JFrame class which allows for frame pop up, and the class also
+ * implements GUI, CollageView, and ActionLister interface.
+ * ActionListen allows for the action for buttons to have an effect in the GUI.
+ */
 public class GUIView extends JFrame implements GUI, CollageView, ActionListener {
 
-  Commands commands;
+  private Commands commands;
   private final JTextField firstName;
   private final JTextArea loadName;
-
   private final JLabel imageLabel;
-
-
   private final JLabel radioDisplay;
-
   private final JLabel fileOpenDisplay;
   private final JLabel fileSaveDisplay;
   private final JLabel fileSaveDisplay2;
-
   private final Appendable appendable;
-
   JPanel mainPanel;
-
   JPanel dialogBoxesPanel;
   private final JTextArea viewMessages;
 
 
+  /**
+   * The main method that handles all the components for the gui.
+   */
   public GUIView() {
-    setTitle(" My motherfucking image processor ");
+    setTitle(" My mother-freaking image processor ");
     setSize(1080, 720);
     mainPanel = new JPanel();
     mainPanel.setLayout(new BorderLayout(10, 10));
@@ -86,7 +109,6 @@ public class GUIView extends JFrame implements GUI, CollageView, ActionListener 
     radioPanel.add(radioDisplay);
     mainPanel.add(radioPanel, BorderLayout.LINE_END);
     radioPanel.setPreferredSize(new Dimension(300, 500));
-
     radioPanel.add(Box.createVerticalGlue());
 
     //process button
@@ -95,7 +117,7 @@ public class GUIView extends JFrame implements GUI, CollageView, ActionListener 
     enter.addActionListener(this);
     radioPanel.add(enter);
 
-    //message panel
+    //message panel for showing progress on layers.
     JPanel messagePanel = new JPanel();
     messagePanel.setBorder(BorderFactory.createTitledBorder("Processes on Layers"));
     messagePanel.setLayout(new GridLayout(1, 2, 5, 5));
@@ -117,7 +139,7 @@ public class GUIView extends JFrame implements GUI, CollageView, ActionListener 
     mainPanel.add(messagePanel, BorderLayout.LINE_START);
 
 
-    //open a file
+    //the panel that deals with all the opening.
     JPanel fileOpenPanel = new JPanel();
     fileOpenPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
     dialogBoxesPanel.add(fileOpenPanel);
@@ -141,7 +163,7 @@ public class GUIView extends JFrame implements GUI, CollageView, ActionListener 
     mainPanel.add(fileOpenPanel, BorderLayout.PAGE_START);
 
 
-    //file save
+    //the panel that deals with all the save operations.
     JPanel fileSavePanel = new JPanel();
     fileSavePanel.setLayout(new FlowLayout(FlowLayout.CENTER));
     dialogBoxesPanel.add(fileSavePanel);
@@ -167,7 +189,7 @@ public class GUIView extends JFrame implements GUI, CollageView, ActionListener 
     fileSavePanel.add(fileSaveDisplay2);
 
 
-
+    // The image panel that displays the layers
     JPanel imgPanel = new JPanel();
     imgPanel.setBorder(BorderFactory.createTitledBorder("Current Project"));
     imgPanel.setLayout(new GridLayout(1, 0));
@@ -184,25 +206,33 @@ public class GUIView extends JFrame implements GUI, CollageView, ActionListener 
   }
 
 
-  public void actionPerformed(ActionEvent arg0) {
-    switch (arg0.getActionCommand()) {
+  /**
+   * This method allows for the usage for the buttons to do some form of action.
+   *
+   * @param commands the event to be processed.
+   */
+  public void actionPerformed(ActionEvent commands) {
+    switch (commands.getActionCommand()) {
       case "Create Project":
         String width = JOptionPane.showInputDialog("Give me width");
         String height = JOptionPane.showInputDialog("Give me height");
         this.commands.createProject(height, width);
-         try {
-           this.appendable.append("A project has been created, with width ").append(width).append(" and height ").append(height).append(" \n");
-         } catch (IOException e) {
+        try {
+          this.appendable.append("A project has been created, with width ").append(width).
+                  append(" and height ").append(height).append(" \n");
+        } catch (IOException e) {
           throw new RuntimeException(e);
-         }
-         viewMessages.setText(appendable.toString());
-         ImageIcon thumbsUp = new ImageIcon("thumps up.jpg");
+        }
+        viewMessages.setText(appendable.toString());
+        ImageIcon thumbsUp = new ImageIcon("res/thumps up.jpg");
         JOptionPane.showMessageDialog(GUIView.this,
-                new JLabel("You have started a project, now have some fun you idiot.", thumbsUp, JLabel.LEFT), "PROJECT STARTED", JOptionPane.PLAIN_MESSAGE);
-         break;
+                new JLabel("You have started a project, now have some fun you idiot.",
+                        thumbsUp, JLabel.LEFT), "PROJECT STARTED", JOptionPane.PLAIN_MESSAGE);
+        break;
       case "Add Layer":
-        ImageIcon monke = new ImageIcon("monke2.jpg");
-        JOptionPane.showMessageDialog(GUIView.this, new JLabel(monke, JLabel.LEFT), "GIVE LAYER", JOptionPane.PLAIN_MESSAGE);
+        ImageIcon monke = new ImageIcon("res/monke2.jpg");
+        JOptionPane.showMessageDialog(GUIView.this, new JLabel(monke, JLabel.LEFT),
+                "GIVE LAYER", JOptionPane.PLAIN_MESSAGE);
         String layerName = JOptionPane.showInputDialog("Give me layer name");
         this.commands.addLayer(layerName);
         try {
@@ -230,7 +260,8 @@ public class GUIView extends JFrame implements GUI, CollageView, ActionListener 
           String heightImage = JOptionPane.showInputDialog("Give Height");
           String widthImage = JOptionPane.showInputDialog("Give Width");
           if (!loadName.getText().equals("")) {
-            this.commands.addImageToLayer(loadName.getText(), fileOpenDisplay.getText(), heightImage, widthImage);
+            this.commands.addImageToLayer(loadName.getText(), fileOpenDisplay.getText(),
+                    heightImage, widthImage);
             firstName.setEditable(true);
             firstName.setVisible(true);
           }
@@ -269,7 +300,8 @@ public class GUIView extends JFrame implements GUI, CollageView, ActionListener 
         viewMessages.setText(appendable.toString());
         break;
       case "Process":
-        String command = radioDisplay.getText().toLowerCase().substring(0, radioDisplay.getText().indexOf(' '));
+        String command = radioDisplay.getText().toLowerCase().substring(0,
+                radioDisplay.getText().indexOf(' '));
         try {
           switch (command) {
             case "red-component":
@@ -277,7 +309,8 @@ public class GUIView extends JFrame implements GUI, CollageView, ActionListener 
                 this.commands.setFilter(firstName.getText(), "red-component");
               }
               try {
-                this.appendable.append("The layer ").append(firstName.getText()).append(" has been filtered by red-component\n");
+                this.appendable.append("The layer ").append(firstName.getText()).
+                        append(" has been filtered by red-component\n");
               } catch (IOException e) {
                 throw new RuntimeException(e);
               }
@@ -288,7 +321,8 @@ public class GUIView extends JFrame implements GUI, CollageView, ActionListener 
                 this.commands.setFilter(firstName.getText(), "green-component");
               }
               try {
-                this.appendable.append("The layer ").append(firstName.getText()).append(" has been filtered by a green-component\n");
+                this.appendable.append("The layer ").append(firstName.getText()).
+                        append(" has been filtered by a green-component\n");
               } catch (IOException e) {
                 throw new RuntimeException(e);
               }
@@ -299,7 +333,8 @@ public class GUIView extends JFrame implements GUI, CollageView, ActionListener 
                 this.commands.setFilter(firstName.getText(), "blue-component");
               }
               try {
-                this.appendable.append("The layer ").append(firstName.getText()).append(" has been filtered by a blue-component\n");
+                this.appendable.append("The layer ").append(firstName.getText()).
+                        append(" has been filtered by a blue-component\n");
               } catch (IOException e) {
                 throw new RuntimeException(e);
               }
@@ -310,7 +345,8 @@ public class GUIView extends JFrame implements GUI, CollageView, ActionListener 
                 this.commands.setFilter(firstName.getText(), "brighten-intensity");
               }
               try {
-                this.appendable.append("The layer ").append(firstName.getText()).append(" has been brightenbyintensity\n");
+                this.appendable.append("The layer ").append(firstName.getText()).
+                        append(" has been brightenbyintensity\n");
               } catch (IOException e) {
                 throw new RuntimeException(e);
               }
@@ -321,7 +357,8 @@ public class GUIView extends JFrame implements GUI, CollageView, ActionListener 
                 this.commands.setFilter(firstName.getText(), "brighten-luma");
               }
               try {
-                this.appendable.append("The layer ").append(firstName.getText()).append(" has been brightenbyluma\n");
+                this.appendable.append("The layer ").
+                        append(firstName.getText()).append(" has been brightenbyluma\n");
               } catch (IOException e) {
                 throw new RuntimeException(e);
               }
@@ -332,7 +369,8 @@ public class GUIView extends JFrame implements GUI, CollageView, ActionListener 
                 this.commands.setFilter(firstName.getText(), "brighten-value");
               }
               try {
-                this.appendable.append("The layer ").append(firstName.getText()).append(" has been brightenbyvalue\n");
+                this.appendable.append("The layer ").
+                        append(firstName.getText()).append(" has been brightenbyvalue\n");
               } catch (IOException e) {
                 throw new RuntimeException(e);
               }
@@ -343,7 +381,8 @@ public class GUIView extends JFrame implements GUI, CollageView, ActionListener 
                 this.commands.setFilter(firstName.getText(), "darken-intensity");
               }
               try {
-                this.appendable.append("The layer ").append(firstName.getText()).append(" has been darkenbyintensity\n");
+                this.appendable.append("The layer ").
+                        append(firstName.getText()).append(" has been darkenbyintensity\n");
               } catch (IOException e) {
                 throw new RuntimeException(e);
               }
@@ -354,7 +393,8 @@ public class GUIView extends JFrame implements GUI, CollageView, ActionListener 
                 this.commands.setFilter(firstName.getText(), "darken-luma");
               }
               try {
-                this.appendable.append("The layer ").append(firstName.getText()).append(" has been darkenbyluma\n");
+                this.appendable.append("The layer ").append(firstName.getText()).append(" " +
+                        "has been darkenbyluma\n");
               } catch (IOException e) {
                 throw new RuntimeException(e);
               }
@@ -365,7 +405,8 @@ public class GUIView extends JFrame implements GUI, CollageView, ActionListener 
                 this.commands.setFilter(firstName.getText(), "darken-value");
               }
               try {
-                this.appendable.append("The layer ").append(firstName.getText()).append(" has been darkenbyvalue\n");
+                this.appendable.append("The layer ").append(firstName.getText()).append(" " +
+                        "has been darkenbyvalue\n");
               } catch (IOException e) {
                 throw new RuntimeException(e);
               }
@@ -376,7 +417,8 @@ public class GUIView extends JFrame implements GUI, CollageView, ActionListener 
                 this.commands.setBlend(firstName.getText(), "BlendingBrighten");
               }
               try {
-                this.appendable.append("The layer ").append(firstName.getText()).append(" has been blendingbrighten\n");
+                this.appendable.append("The layer ").append(firstName.getText()).append(" " +
+                        "has been blendingbrighten\n");
               } catch (IOException e) {
                 throw new RuntimeException(e);
               }
@@ -387,7 +429,8 @@ public class GUIView extends JFrame implements GUI, CollageView, ActionListener 
                 this.commands.setBlend(firstName.getText(), "BlendingDarken");
               }
               try {
-                this.appendable.append("The layer ").append(firstName.getText()).append(" has been blendingdarken\n");
+                this.appendable.append("The layer ").append(firstName.getText()).append("" +
+                        " has been blendingdarken\n");
               } catch (IOException e) {
                 throw new RuntimeException(e);
               }
@@ -398,16 +441,21 @@ public class GUIView extends JFrame implements GUI, CollageView, ActionListener 
                 this.commands.setBlend(firstName.getText(), "BlendingDifference");
               }
               try {
-                this.appendable.append("The layer ").append(firstName.getText()).append(" has been blendingdifference\n");
+                this.appendable.append("The layer ").append(firstName.getText()).append(
+                        " has been blendingdifference\n");
               } catch (IOException e) {
                 throw new RuntimeException(e);
               }
               viewMessages.setText(appendable.toString());
               break;
+            default:
+              this.appendable.append("Not a valid filter");
+              viewMessages.setText(appendable.toString());
           }
         } catch (Exception e) {
           throw new RuntimeException(e);
         }
+        break;
       case "RB1":
         radioDisplay.setText("Red-Component was selected");
         break;
@@ -444,10 +492,21 @@ public class GUIView extends JFrame implements GUI, CollageView, ActionListener 
       case "RB12":
         radioDisplay.setText("BlendingDifference was selected");
         break;
+      default:
+        try {
+          this.appendable.append("Not a valid command.");
+        } catch (IOException e) {
+          //
+        }
+        viewMessages.setText(appendable.toString());
     }
   }
 
-
+  /**
+   * This method is used as safe access to the commands from the model to the gui so each button
+   * can perform its desired effects.
+   * @param cmd the commands to be used in the GUI class.
+   */
   @Override
   public void addCommands(Commands cmd) {
     this.commands = cmd;
@@ -459,15 +518,15 @@ public class GUIView extends JFrame implements GUI, CollageView, ActionListener 
     repaint();
   }
 
+  /**
+   * This method is used after a command fom the model is called to the GUI. It refreshes the gui
+   * to display the most update image after any modifications to the layer.
+   *
+   * @param image the image being updated.
+   */
   public void refreshImage(Image image) {
     imageLabel.setIcon(new ImageIcon(image));
     validate();
     repaint();
   }
 }
-
-
-
-
-
-

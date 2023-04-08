@@ -3,7 +3,8 @@ import java.io.FileReader;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.Scanner;
-import javax.swing.*;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 import cs3500.controller.Controller;
 import cs3500.controller.ControllerGUI;
 import cs3500.model.Collage;
@@ -12,15 +13,23 @@ import cs3500.view.GUIView;
 import cs3500.view.View;
 import cs3500.controller.IController;
 
-
+/**
+ * The main is designed to run three versions of the model controller, one dealing with the gui,
+ * the other dealing with terminal user input and the last dealing with script files.
+ */
 public class Main {
+  /**
+   * The main method delegated between the three versions based off the first word in the command
+   * arguments.
+   * @param args the command arguments that will determine which version to run.
+   */
   public static void main(String[] args) {
     ICollage model = new Collage();
     if (args.length == 0) {
       GUIView.setDefaultLookAndFeelDecorated(false);
       GUIView frame = new GUIView();
       frame.setVisible(true);
-      ImageIcon holyImage = new ImageIcon("luffy-icon.jpg");
+      ImageIcon holyImage = new ImageIcon("res/luffy-icon.jpg");
       frame.setIconImage(holyImage.getImage());
       frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
       ControllerGUI controllerGUI = new ControllerGUI(model, frame);
@@ -31,16 +40,16 @@ public class Main {
       IController controller = new Controller(model, rd, textView);
       controller.apply();
     } else if (args[0].equals("-file")) {
-        Reader reader = null;
-        try {
-          reader = new FileReader(args[1]);
-          Scanner scan = new Scanner(reader);
-          while (scan.hasNextLine()) {
-            System.out.println(scan.nextLine());
-          }
-        } catch (FileNotFoundException e) {
-          throw new RuntimeException(e);
+      Reader reader = null;
+      try {
+        reader = new FileReader(args[1]);
+        Scanner scan = new Scanner(reader);
+        while (scan.hasNextLine()) {
+          System.out.println(scan.nextLine());
         }
+      } catch (FileNotFoundException e) {
+        throw new RuntimeException(e);
+      }
     }
   }
 }

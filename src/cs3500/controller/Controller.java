@@ -1,20 +1,20 @@
 package cs3500.controller;
 
 import java.util.Scanner;
-
-import cs3500.Filter.BlendingBrighten;
-import cs3500.Filter.BlendingDarken;
-import cs3500.Filter.BlendingDifference;
-import cs3500.Filter.FilterBlue;
-import cs3500.Filter.FilterGreen;
-import cs3500.Filter.FilterRed;
-import cs3500.Filter.IBlending;
-import cs3500.Filter.IFilter;
+import cs3500.filter.BlendingBrighten;
+import cs3500.filter.BlendingDarken;
+import cs3500.filter.BlendingDifference;
+import cs3500.filter.IBlending;
+import cs3500.filter.IFilter;
 import cs3500.model.ICollage;
 import cs3500.view.View;
-
 import static cs3500.controller.ControllerGUI.getIFilterName;
 
+/**
+ * This class handles the commands from the model to allow the user to type in those
+ * commands in the terminal without having to actually worry about what is in the model.
+ * It implements the IController interface and Commands interface.
+ */
 public class Controller implements IController, Commands {
 
 
@@ -24,7 +24,12 @@ public class Controller implements IController, Commands {
 
   private final View view;
 
-
+  /**
+   * This is the constructor to initialize a controller made fot text input in the terminal.
+   * @param model the model to be connected to the controller.
+   * @param readable an object used for reading in inputs.
+   * @param view has a visual ability for the user to see anything in the terminal.
+   */
   public Controller(ICollage model, Readable readable, View view) {
     if ((model == null) || (view == null) || (readable == null)) {
       throw new IllegalArgumentException("Arguments cannot be null");
@@ -95,7 +100,7 @@ public class Controller implements IController, Commands {
     this.model.setFilter(name, this.filterChoice(filter));
   }
 
- @Override
+  @Override
   public void setBlend(String layerName, String blend) {
     this.model.setBlend(layerName, this.getIBlenderName(blend));
   }
@@ -147,6 +152,7 @@ public class Controller implements IController, Commands {
             String blendChoice = s.next();
             setBlend(currLayer, blendChoice);
             view.renderMessage("Done\n");
+            break;
           case "save-image":
             String nameOfImage = s.next();
             saveImage(nameOfImage);
@@ -162,9 +168,11 @@ public class Controller implements IController, Commands {
             loadProject(project);
             view.renderMessage("Done\n");
             break;
+          default:
+            view.renderMessage("Error: Unknown command");
         }
       } catch (Exception e) {
-          throw new RuntimeException(e);
+        throw new RuntimeException(e);
       }
     }
   }
