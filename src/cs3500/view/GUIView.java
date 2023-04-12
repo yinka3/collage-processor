@@ -65,7 +65,6 @@ public class GUIView extends JFrame implements GUI, CollageView, ActionListener 
     mainPanel.setBackground(Color.darkGray);
     add(mainScrollPane);
 
-
     dialogBoxesPanel = new JPanel();
     dialogBoxesPanel.setBorder(BorderFactory.createTitledBorder("Dialog boxes"));
     dialogBoxesPanel.setLayout(new BoxLayout(dialogBoxesPanel, BoxLayout.PAGE_AXIS));
@@ -78,9 +77,7 @@ public class GUIView extends JFrame implements GUI, CollageView, ActionListener 
     radioPanel.add(firstName);
     radioPanel.add(Box.createVerticalGlue());
     radioPanel.setBorder(BorderFactory.createTitledBorder("Image Processing Commands"));
-
     radioPanel.setLayout(new BoxLayout(radioPanel, BoxLayout.PAGE_AXIS));
-
     JRadioButton[] radioButtons = new JRadioButton[12];
     ButtonGroup rGroup1 = new ButtonGroup();
 
@@ -143,7 +140,7 @@ public class GUIView extends JFrame implements GUI, CollageView, ActionListener 
     JPanel fileOpenPanel = new JPanel();
     fileOpenPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
     dialogBoxesPanel.add(fileOpenPanel);
-    JButton fileOpenButton = new JButton("Load PPM Image or Project");
+    JButton fileOpenButton = new JButton("Load Image or Project");
     JButton newProject = new JButton("Create Project");
     newProject.setActionCommand("Create Project");
     newProject.addActionListener(this);
@@ -155,7 +152,7 @@ public class GUIView extends JFrame implements GUI, CollageView, ActionListener 
     loadName = new JTextArea(1, 20);
     loadName.setBorder(BorderFactory.createTitledBorder("Name of Layer in program"));
     fileOpenPanel.add(loadName);
-    fileOpenButton.setActionCommand("Load PPM Image or Project");
+    fileOpenButton.setActionCommand("Load Image or Project");
     fileOpenButton.addActionListener(this);
     fileOpenPanel.add(fileOpenButton);
     fileOpenDisplay = new JLabel("File path");
@@ -167,8 +164,8 @@ public class GUIView extends JFrame implements GUI, CollageView, ActionListener 
     JPanel fileSavePanel = new JPanel();
     fileSavePanel.setLayout(new FlowLayout(FlowLayout.CENTER));
     dialogBoxesPanel.add(fileSavePanel);
-    JButton fileSaveButton = new JButton("Save a ppm file");
-    fileSaveButton.setActionCommand("Save a ppm file");
+    JButton fileSaveButton = new JButton("Save an image");
+    fileSaveButton.setActionCommand("Save an image");
     fileSaveButton.addActionListener(this);
     fileSaveDisplay = new JLabel("File path");
     JButton fileSaveButton2 = new JButton("Save a collage file");
@@ -248,7 +245,7 @@ public class GUIView extends JFrame implements GUI, CollageView, ActionListener 
         }
         viewMessages.setText(appendable.toString());
         break;
-      case "Load PPM Image or Project":
+      case "Load Image or Project":
         final JFileChooser fchooser = new JFileChooser(".");
         FileNameExtensionFilter filter = new FileNameExtensionFilter(
                 "Image Types", "jpg", "ppm", "png", "jpeg");
@@ -267,7 +264,7 @@ public class GUIView extends JFrame implements GUI, CollageView, ActionListener 
           }
         }
         break;
-      case "Save a ppm file":
+      case "Save an image":
         final JFileChooser fchooser2 = new JFileChooser(".");
         int retvalue2 = fchooser2.showSaveDialog(GUIView.this);
         if (retvalue2 == JFileChooser.APPROVE_OPTION) {

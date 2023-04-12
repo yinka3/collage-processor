@@ -5,7 +5,7 @@ package cs3500.imageutil;
  * it has a hue, saturation, and light. This can have modifications to the light
  * visibility of photos. They are all double because components tends to be between 0 and 1.
  */
-public class HSL {
+public class HSL implements IHSL {
 
   private final double hue;
   private final double saturation;
@@ -27,16 +27,16 @@ public class HSL {
    * Constructs a new HSL with an RGBA.
    * @param rgba RGBA being converted into an HSL.
    */
-  public HSL(RGBA rgba) {
+  public HSL(IRGBA rgba) {
     this.hue =
             RepresentationConverter.convertRGBToHSL(rgba.getRed(), rgba.getGreen(),
-                    rgba.getBlue()).hue;
+                    rgba.getBlue()).getHue();
     this.saturation =
             RepresentationConverter.convertRGBToHSL(rgba.getRed(), rgba.getGreen(),
-                    rgba.getBlue()).saturation;
+                    rgba.getBlue()).getSaturation();
     this.light =
             RepresentationConverter.convertRGBToHSL(rgba.getRed(), rgba.getGreen(),
-                    rgba.getBlue()).light;
+                    rgba.getBlue()).getLight();
 
 
   }

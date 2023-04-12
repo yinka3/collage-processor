@@ -1,6 +1,7 @@
 package cs3500.filter;
 
 
+import cs3500.imageutil.IRGBA;
 import cs3500.imageutil.RGBA;
 
 
@@ -15,7 +16,7 @@ public interface IFilter {
    * @param input rgba the filter is being applied to.
    * @return the new RGBA with the filter applied.
    */
-  RGBA apply(RGBA input);
+  IRGBA apply(IRGBA input);
 
   /**
    * Creates a representation of a filter.

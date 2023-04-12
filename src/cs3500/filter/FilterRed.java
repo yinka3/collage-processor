@@ -1,5 +1,6 @@
 package cs3500.filter;
 
+import cs3500.imageutil.IRGBA;
 import cs3500.imageutil.RGBA;
 
 /**
@@ -9,7 +10,7 @@ import cs3500.imageutil.RGBA;
  */
 public class FilterRed implements IFilter {
 
-  public RGBA apply(RGBA input) {
+  public IRGBA apply(IRGBA input) {
     return new RGBA(input.getRed(), 0, 0 , input.getAlpha());
   }
 

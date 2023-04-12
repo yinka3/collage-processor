@@ -9,6 +9,7 @@ import cs3500.controller.Controller;
 import cs3500.controller.ControllerGUI;
 import cs3500.model.Collage;
 import cs3500.model.ICollage;
+import cs3500.view.CollageView;
 import cs3500.view.GUIView;
 import cs3500.view.View;
 import cs3500.controller.IController;
@@ -35,7 +36,7 @@ public class Main {
       ControllerGUI controllerGUI = new ControllerGUI(model, frame);
       controllerGUI.setView(frame);
     } else if (args[0].equals("-text")) {
-      View textView = new View(model, System.out);
+      CollageView textView = new View(model, System.out);
       Readable rd = new InputStreamReader(System.in);
       IController controller = new Controller(model, rd, textView);
       controller.apply();

@@ -19,7 +19,7 @@ public class RepresentationConverter {
    * @param g green value of the RGB between 0 and 1
    * @param b blue value of the RGB between 0 and 1
    */
-  public static HSL convertRGBToHSL(double r, double g, double b) {
+  public static IHSL convertRGBToHSL(double r, double g, double b) {
 
     double componentMax = Math.max(r, Math.max(g, b));
     double componentMin = Math.min(r, Math.min(g, b));
@@ -69,7 +69,7 @@ public class RepresentationConverter {
    * @param alpha how transparent the HSL representation should be
    */
 
-  public static RGBA convertHSLToRGB(double hue, double saturation, double lightness,
+  public static IRGBA convertHSLToRGB(double hue, double saturation, double lightness,
                                      double alpha) {
     double r = convertFn(hue, saturation, lightness, 0) * 255;
     double g = convertFn(hue, saturation, lightness, 8) * 255;

@@ -1,5 +1,6 @@
 package cs3500.filter;
 
+import cs3500.imageutil.IRGBA;
 import cs3500.imageutil.RGBA;
 
 /**
@@ -11,7 +12,7 @@ import cs3500.imageutil.RGBA;
 public class BlendingDifference implements IBlending {
 
   @Override
-  public RGBA apply(RGBA rgba1, RGBA rgba2) {
+  public IRGBA apply(IRGBA rgba1, IRGBA rgba2) {
     int newRed = Math.abs(rgba1.getRed() - rgba2.getRed());
     int newGreen = Math.abs(rgba1.getGreen() - rgba2.getGreen());
     int newBlue = Math.abs(rgba1.getBlue() - rgba2.getBlue());

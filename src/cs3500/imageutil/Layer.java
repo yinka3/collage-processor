@@ -9,9 +9,9 @@ import cs3500.filter.IFilter;
  * programmer's needs like filtering and such.
  *
  */
-public class Layer {
+public class Layer implements ILayer {
 
-  private final RGBA[][] rgba2;
+  private final IRGBA[][] rgba2;
 
   private final int height;
 
@@ -68,7 +68,7 @@ public class Layer {
    * the pixels of the layer.
    * @param pixels the 2D array of pixels that are being copied.
    */
-  public void setRGBA(RGBA[][] pixels) {
+  public void setRGBA(IRGBA[][] pixels) {
     for (int i = 0; i < this.height; i++) {
       for (int j = 0; j < this.width; j++) {
         this.rgba2[i][j] = pixels[i][j].copy();
@@ -97,7 +97,7 @@ public class Layer {
    * @param filtered the 2D array of pixel to be set onto layer filtered.
    * @return a new 2D array onto the layer that are filtered.
    */
-  public RGBA[][] getFilter(RGBA[][] filtered) {
+  public IRGBA[][] getFilter(IRGBA[][] filtered) {
     for (int j = 0; j < this.height; j++) {
       for (int i = 0; i < this.width; i++) {
         filtered[j][i] = this.filter.apply(filtered[j][i]);
@@ -126,8 +126,8 @@ public class Layer {
    * This is a helper methods which copies the contents of a 2D array of pixels.
    * @return a 2D array of pixels that are copies.
    */
-  public RGBA[][] getNewRgba2() {
-    RGBA[][] temp = new RGBA[this.height][this.width];
+  public IRGBA[][] getNewRgba2() {
+    IRGBA[][] temp = new RGBA[this.height][this.width];
     for (int i = 0; i < this.height; i++) {
       for (int j = 0; j < this.width; j++) {
         temp[i][j] = this.rgba2[i][j].copy();
@@ -140,7 +140,7 @@ public class Layer {
    * This is used to render out a visual of the filtered 2D array of pixels of the layer.
    * @return a filtered 2D array of pixels of the layer
    */
-  public RGBA[][] visualize() {
+  public IRGBA[][] visualize() {
     return this.getFilter(this.getNewRgba2());
   }
 
@@ -151,7 +151,7 @@ public class Layer {
    * @param yOffset integer of the offset position of the y coordinate.
    * @param xOffset integer of the offset position of the x coordinate.
    */
-  public void addImage(PPMUtil imgName, int yOffset, int xOffset) {
+  public void addImage(IPPMUtil imgName, int yOffset, int xOffset) {
     if (imgName == null) {
       throw new IllegalArgumentException("no image is here");
     }
@@ -162,7 +162,7 @@ public class Layer {
 
     for (int y = yOffset; y < Math.min(imgName.getHeight() + yOffset, this.height); y++) {
       for (int x = xOffset; x < Math.min(imgName.getWidth() + xOffset, this.width) ; x++) {
-        RGBA clone = imgName.getPixelAt(y - yOffset, x - xOffset).copy();
+        IRGBA clone = imgName.getPixelAt(y - yOffset, x - xOffset).copy();
         this.rgba2[y][x] = clone;
       }
     }

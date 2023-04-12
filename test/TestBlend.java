@@ -4,6 +4,8 @@ import cs3500.filter.BlendingDarken;
 import cs3500.filter.BlendingDifference;
 import cs3500.filter.IBlending;
 import cs3500.imageutil.HSL;
+import cs3500.imageutil.IHSL;
+import cs3500.imageutil.IRGBA;
 import cs3500.imageutil.RGBA;
 
 import static org.junit.Assert.assertEquals;
@@ -12,24 +14,24 @@ import static org.junit.Assert.assertEquals;
  * Testing blend filters.
  */
 public class TestBlend {
-  HSL testHSL;
-  RGBA test1;
-  RGBA test2;
-  RGBA test3;
-  RGBA test4;
+  IHSL testHSL;
+  IRGBA test1;
+  IRGBA test2;
+  IRGBA test3;
+  IRGBA test4;
   int value1;
   int value2;
   int value3;
   int value4;
 
-  RGBA filtered1;
-  RGBA filtered2;
-  RGBA filtered3;
-  RGBA filtered4;
-  RGBA expected1;
-  RGBA expected2;
-  RGBA expected3;
-  RGBA expected4;
+  IRGBA filtered1;
+  IRGBA filtered2;
+  IRGBA filtered3;
+  IRGBA filtered4;
+  IRGBA expected1;
+  IRGBA expected2;
+  IRGBA expected3;
+  IRGBA expected4;
 
   IBlending blend;
 

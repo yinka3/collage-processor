@@ -1,5 +1,7 @@
 package cs3500.view;
 
+import java.awt.*;
+
 import cs3500.controller.Commands;
 
 /**
@@ -15,4 +17,7 @@ public interface GUI {
    */
   void addCommands(Commands cmd);
 
+  void refreshImage(Image image);
+
+  void refresh();
 }

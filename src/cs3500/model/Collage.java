@@ -11,6 +11,8 @@ import java.util.Set;
 
 import cs3500.filter.IBlending;
 import cs3500.filter.IFilter;
+import cs3500.imageutil.ILayer;
+import cs3500.imageutil.IRGBA;
 import cs3500.imageutil.Layer;
 import cs3500.imageutil.PPMUtil;
 import cs3500.imageutil.RGBA;
@@ -24,7 +26,7 @@ import cs3500.imageutil.RGBA;
 public class Collage implements ICollage {
 
 
-  private Map<String, Layer> knownImages;
+  private Map<String, ILayer> knownImages;
 
   private int height;
 
@@ -84,8 +86,8 @@ public class Collage implements ICollage {
    * @param blend is the blending filter to be used on the combined layers.
    * @return a 2D array of pixels of combined layers.
    */
-  private RGBA[][] applyTrans(RGBA[][] curr, RGBA[][] bg, IBlending blend) {
-    RGBA[][] finalImage = new RGBA[this.height][this.width];
+  private IRGBA[][] applyTrans(IRGBA[][] curr, IRGBA[][] bg, IBlending blend) {
+    IRGBA[][] finalImage = new RGBA[this.height][this.width];
     for (int j = 0; j < this.height; j++) {
       for (int i = 0; i < this.width; i++) {
         if (blend != null) {
@@ -143,25 +145,29 @@ public class Collage implements ICollage {
    *
    * @return a 2d array of RGBAs that make up a composite image of all the layers.
    */
-  public RGBA[][] finalPixel() {
+  public IRGBA[][] finalPixel() {
     if (!this.isStarted) {
       throw new IllegalStateException("project has not started");
     }
-    RGBA[][] finalImage = new RGBA[this.height][this.width];
+    IRGBA[][] finalImage = new RGBA[this.height][this.width];
     for (int i = 0; i < this.height; i++) {
       for (int j = 0; j < this.width; j++) {
         finalImage[i][j] = new RGBA(0, 0, 0, 0);
       }
     }
-    for (Layer layer : this.knownImages.values()) {
+    for (ILayer layer : this.knownImages.values()) {
       finalImage = this.applyTrans(layer.visualize(), finalImage, layer.getBlend());
     }
     return finalImage;
   }
 
 
-  public void savePPMImage(String filepath) {
-    new PPMUtil(this.finalPixel(), filepath, this.height, this.width).savePPM(filepath);
+  public void saveImage(String filepath) {
+    if (filepath.endsWith(".ppm")) {
+      new PPMUtil(this.finalPixel(), filepath, this.height, this.width).savePPM(filepath);
+    } else if (filepath.endsWith(".jpg") || filepath.endsWith(".png")) {
+      new PPMUtil(this.finalPixel(), filepath, this.height, this.width).saveFile(filepath);
+    }
   }
 
   /**
@@ -207,13 +213,13 @@ public class Collage implements ICollage {
       writer.print(this.height);
       writer.println(this.width);
 
-      for (Layer layer : this.knownImages.values()) {
+      for (ILayer layer : this.knownImages.values()) {
         writer.print(layer.getName());
         writer.print(layer.getAlpha());
         writer.println(layer.getFilter().toString());
-        RGBA[][] pixels = layer.visualize();
-        for (RGBA[] row : pixels) {
-          for (RGBA pixel : row) {
+        IRGBA[][] pixels = layer.visualize();
+        for (IRGBA[] row : pixels) {
+          for (IRGBA pixel : row) {
             writer.print(pixel.getRed());
             writer.print(pixel.getGreen());
             writer.print(pixel.getBlue());
@@ -238,7 +244,7 @@ public class Collage implements ICollage {
       project.createProject(height, width);
       while (scan.hasNextLine()) {
         String layerName = scan.nextLine();
-        RGBA[][] pixels = new RGBA[height][width];
+        IRGBA[][] pixels = new RGBA[height][width];
         for (int i = 0; i < height; i++) {
           for (int j = 0; j < width; j++) {
             int red = scan.nextInt();
@@ -248,7 +254,7 @@ public class Collage implements ICollage {
             pixels[i][j] = new RGBA(red, green, blue, alphaValue);
           }
         }
-        Layer l1 = new Layer(layerName, height, width);
+        ILayer l1 = new Layer(layerName, height, width);
         l1.setRGBA(pixels);
         project.knownImages.put(layerName, l1);
       }
@@ -263,11 +269,11 @@ public class Collage implements ICollage {
    *
    * @return a string key to layer value hashmap.
    */
-  public Map<String, Layer> getKnownImages() {
-    Map<String, Layer> copy = new HashMap<>();
-    Set<Map.Entry<String, Layer>> entries = knownImages.entrySet();
+  public Map<String, ILayer> getKnownImages() {
+    Map<String, ILayer> copy = new HashMap<>();
+    Set<Map.Entry<String, ILayer>> entries = knownImages.entrySet();
 
-    for (Map.Entry<String, Layer> mapEntry : entries) {
+    for (Map.Entry<String, ILayer> mapEntry : entries) {
       copy.put(mapEntry.getKey(), mapEntry.getValue());
     }
     return copy;

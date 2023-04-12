@@ -3,11 +3,26 @@ Abigail Rajadurai and Adeyinka Adedewe.
 
 This project is a collage-maker.
 
-#### The base of our program is the RGBA class. This class represents a pixel of an image in the form of
-#### an RGBA, where the pixel's Red, Green, Blue, Max, and Alpha components are represented as Integers
-#### and Doubles. An RGBA can be 3 or 4 component. A 3 component RGBA only has red, green, and blue
-#### values. A 4 component RGBA has all 3 color values and also an Alpha component representing how
-#### much the pixel appears in an image.
+The base of our program is the RGBA class. This class represents a pixel of an image in the form of
+an RGBA, where the pixel's Red, Green, Blue, Max, and Alpha components are represented as Integers
+and Doubles. An RGBA can be 3 or 4 component. A 3 component RGBA only has red, green, and blue
+values. A 4 component RGBA has all 3 color values and also an Alpha component representing how
+much the pixel appears in an image.
+
+
+### Update(04/11/23) Decoupling:
+    - In order to allow for complete decoupling within our code, we decided to make more interfaces
+        for our class. We added in an IHSL, ILayer, IPPMUtil and IRGBA. This was all the interfaces
+        needed to fully decouple our code.
+    - We decided to not make an interface for RepresentationConverter as, it contains a lot more
+        static methods than public methods so an interface was not needed. Additionally, when 
+        testing out decoupling, the way we implemeneted the class, the code compiles without the
+        need of an interface.
+    - The interfaces needed to be sent are CollageView, Commands, GUI, IBlending, ICollage,
+        IController, IFilter, IHSL, IRGBA, IPPMUtil, ILayer.
+    - The classes needed were the view classes.
+    - We also added to more methods in our PPMUtil class, one that readFile and saveFiles, this is
+        used to load in and save more general types of images like png and jpg.
 
 ### The RGBA class implements the following public methods:
     - getRed, getGreen, getBlue, getAlpha, getMax return value of the RGBA's respective components.
@@ -33,10 +48,10 @@ a class in which we can convert from HSL to RGB and vice versa. All the componen
     - The clamp methods to bound the HSL components between certain values.
 
 
-### The next level of our program is a "layer", or a collection of images that are applied to the
-### collage together. Layers are manipulated as a whole. The representation of a layer is mainly
-### defined as a 2D array of pixels, which we thought was best suited for manipulation and an image
-### which is essentially is a layer is defined as a 2 dimensional plane of pixels.
+The next level of our program is a "layer", or a collection of images that are applied to the
+collage together. Layers are manipulated as a whole. The representation of a layer is mainly
+defined as a 2D array of pixels, which we thought was best suited for manipulation and an image
+which is essentially is a layer is defined as a 2 dimensional plane of pixels.
 
 #### The Layer Interface enumerates the following methods:
     - getName returns the name of a layer.
@@ -52,13 +67,13 @@ a class in which we can convert from HSL to RGB and vice versa. All the componen
     - addImageToLayer adds an image to a layer.
 
 
-### The highest level of the program is the processor itself, which manipulates a collage.
-### Processors have multiple commands that can be used to work on a project. The collage, we thought
-### at first was to be a list of layers but had given some difficulties in implementing some 
-### methods, especially the addImageToLayer. After some view into java documentation,
-### a map specifically as a LinkedHashmap was best suited, as it allowed for easy access 
-### to a layer just based off the string name. Additionally, the LinkedHashmap allowed for 
-### ordered pairs as regular hashmaps are unordered. This was needed for the set blend portion.
+The highest level of the program is the processor itself, which manipulates a collage.
+Processors have multiple commands that can be used to work on a project. The collage, we thought
+at first was to be a list of layers but had given some difficulties in implementing some 
+methods, especially the addImageToLayer. After some view into java documentation,
+a map specifically as a LinkedHashmap was best suited, as it allowed for easy access 
+to a layer just based off the string name. Additionally, the LinkedHashmap allowed for 
+ordered pairs as regular hashmaps are unordered. This was needed for the set blend portion.
 
 #### These commands are:
     - AddImageToLayer adds an image to a layer.

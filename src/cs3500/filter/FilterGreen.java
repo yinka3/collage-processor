@@ -1,6 +1,7 @@
 package cs3500.filter;
 
 import cs3500.imageutil.RGBA;
+import cs3500.imageutil.IRGBA;
 
 /**
  * Applies a green filter to a single pixel. Returns a new pixel with the same green value and
@@ -10,7 +11,7 @@ import cs3500.imageutil.RGBA;
 public class FilterGreen implements IFilter {
 
   @Override
-  public RGBA apply(RGBA rgba) {
+  public IRGBA apply(IRGBA rgba) {
     return new RGBA(0, rgba.getGreen(), 0, rgba.getAlpha());
   }
 

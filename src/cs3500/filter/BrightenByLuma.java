@@ -1,5 +1,6 @@
 package cs3500.filter;
 
+import cs3500.imageutil.IRGBA;
 import cs3500.imageutil.RGBA;
 
 /**
@@ -8,7 +9,7 @@ import cs3500.imageutil.RGBA;
  */
 public class BrightenByLuma implements IFilter {
   @Override
-  public RGBA apply(RGBA input) {
+  public IRGBA apply(IRGBA input) {
     int r = RGBA.clamp((int) (input.getRed() + input.luma(input.getRed(), input.getGreen(),
             input.getBlue())));
     int g = RGBA.clamp((int) (input.getGreen() + input.luma(input.getRed(), input.getGreen(),

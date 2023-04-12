@@ -14,11 +14,12 @@ import cs3500.filter.FilterGreen;
 import cs3500.filter.FilterRed;
 import cs3500.filter.IBlending;
 import cs3500.filter.IFilter;
-import cs3500.imageutil.RGBA;
+import cs3500.imageutil.IRGBA;
 import cs3500.model.ICollage;
+import cs3500.view.GUI;
 import cs3500.view.GUIView;
-
 import static cs3500.controller.Controller.getiBlending;
+
 
 /**
  * This class handles the commands that will be used in the GUI class, allowing for clean
@@ -27,12 +28,12 @@ import static cs3500.controller.Controller.getiBlending;
  */
 public class ControllerGUI implements Commands {
 
-  private GUIView guiView;
+  private GUI guiView;
 
   private final ICollage model;
 
 
-  public ControllerGUI(ICollage image, GUIView view) {
+  public ControllerGUI(ICollage image, GUI view) {
     this.guiView = view;
     this.model = image;
   }
@@ -111,7 +112,7 @@ public class ControllerGUI implements Commands {
 
   @Override
   public void saveImage(String nameOfImage) {
-    this.model.savePPMImage(nameOfImage);
+    this.model.saveImage(nameOfImage);
     guiView.refreshImage(this.getImage());
     guiView.refresh();
   }
@@ -127,7 +128,7 @@ public class ControllerGUI implements Commands {
   public void setFilter(String name, String filter) {
     this.model.setFilter(name, this.filterChoice(filter));
     guiView.refreshImage(this.getImage());
-    guiView.repaint();
+    guiView.refresh();
   }
 
 
@@ -135,7 +136,7 @@ public class ControllerGUI implements Commands {
   public void setBlend(String layerName, String blend) {
     this.model.setBlend(layerName, this.getIBlenderName(blend));
     guiView.refreshImage(this.getImage());
-    guiView.repaint();
+    guiView.refresh();
   }
 
   @Override
@@ -151,7 +152,7 @@ public class ControllerGUI implements Commands {
    * @return a buffered image of the 2D array of pixels.
    */
   public Image getImage() {
-    RGBA[][] pixels = this.model.finalPixel();
+    IRGBA[][] pixels = this.model.finalPixel();
     BufferedImage img = new BufferedImage(this.model.getWidth(),
             this.model.getHeight(), BufferedImage.TYPE_INT_RGB);
     for (int y = 0; y < this.model.getHeight(); y++) {

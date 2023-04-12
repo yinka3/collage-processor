@@ -1,5 +1,6 @@
 package cs3500.filter;
 
+import cs3500.imageutil.IRGBA;
 import cs3500.imageutil.RGBA;
 
 /**
@@ -15,7 +16,7 @@ public interface IBlending {
    * @param rgba2 second RGBA being used.
    * @return a new RGBA with filter applied.
    */
-  RGBA apply(RGBA rgba1, RGBA rgba2);
+  IRGBA apply(IRGBA rgba1, IRGBA rgba2);
 
   /**
    * Overrides the to String to create a representation of a blend filter.

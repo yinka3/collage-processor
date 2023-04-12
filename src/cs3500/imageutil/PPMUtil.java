@@ -1,5 +1,7 @@
 package cs3500.imageutil;
 
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -8,26 +10,32 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
+import javax.imageio.ImageIO;
+
 /**
  * The PPMUtil class is a utility class for a ppm file to be used as an image for modification
  * and then added onto a layer of choice.
  * The PPMUtil class specifically covers for file reading and write for ppm Images.
  */
-public class PPMUtil {
+public class PPMUtil implements IPPMUtil {
 
 
   private int height;
   private int width;
-  private final String file;
-  private RGBA[][] pixels;
+  private String file;
+  private IRGBA[][] pixels;
 
   /**
    * A constructor used for reading in ppm files from a filepath from your local filesystem.
    * @param filepath is the absolute file path used to read in.
    */
   public PPMUtil(String filepath) {
-    this.file = this.removeExtension(filepath);
-    this.readPPM(filepath);
+    if (filepath.endsWith(".ppm")) {
+      this.readPPM(filepath);
+    }
+    else {
+      this.readFiles(filepath);
+    }
   }
 
   /**
@@ -38,15 +46,14 @@ public class PPMUtil {
    * @param height the height of the image.
    * @param width the width of the image.
    */
-  public PPMUtil(RGBA[][] rgba, String filepath, int height, int width) {
-    RGBA[][] temp = new RGBA[height][width];
+  public PPMUtil(IRGBA[][] rgba, String filepath, int height, int width) {
+    IRGBA[][] temp = new RGBA[height][width];
     for (int y = 0; y < height; y++) {
       for (int x = 0; x < width; x++) {
         temp[y][x] = rgba[y][x].copy();
       }
     }
 
-    this.file = this.removeExtension(filepath);
     this.height = height;
     this.width = width;
     this.pixels = temp;
@@ -73,13 +80,21 @@ public class PPMUtil {
    * @param filePath the filepath to be taken out its extension.
    * @return the filepath without an extension.
    */
-  public String removeExtension(String filePath) {
+  private String removeExtension(String filePath) {
     String fileName = new File(filePath).getName();
     int dotIndex = fileName.lastIndexOf('.');
     if (dotIndex > 0 && dotIndex < fileName.length() - 1) {
       fileName = fileName.substring(0, dotIndex);
     }
     return fileName;
+  }
+
+  private String getFileExtension(String file) {
+    int lastIndexOf = file.lastIndexOf(".");
+    if (lastIndexOf == -1) {
+      return ""; // empty extension
+    }
+    return file.substring(lastIndexOf);
   }
 
   /**
@@ -127,6 +142,26 @@ public class PPMUtil {
     }
   }
 
+  public void readFiles(String filename) {
+    try {
+      File imageFile = new File(filename);
+      BufferedImage img = ImageIO.read(imageFile);
+      this.width = img.getWidth();
+      this.height = img.getHeight();
+      IRGBA[][] pixels = new RGBA[height][width];
+      for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+          Color c = new Color(img.getRGB(x, y));
+          pixels[y][x] = new RGBA(c.getRed(), c.getGreen(), c.getBlue());
+
+        }
+      }
+      this.pixels = pixels;
+    } catch (IOException e) {
+      System.out.println(e.getMessage());
+    }
+  }
+
   /**
    * checks if the x and y coordinates are in bound of the photo.
    * False if it is out and true otherwise.
@@ -146,7 +181,7 @@ public class PPMUtil {
    * @return the x and y coordinates of the pixel.
    * @throws IllegalArgumentException if the coordinates are not in bound.
    */
-  public RGBA getPixelAt(int y, int x) throws IllegalArgumentException {
+  public IRGBA getPixelAt(int y, int x) throws IllegalArgumentException {
     if (isOutOfBounds(y, x)) {
       throw new IllegalArgumentException("invalid pixel");
     }
@@ -159,27 +194,59 @@ public class PPMUtil {
    * @param filepath the path to be saved as.
    */
   public void savePPM(String filepath) {
-    try {
-      PrintWriter writer = new PrintWriter(new FileOutputStream(filepath));
-      writer.write("P3\n");
-      writer.write(this.width + " " + this.height + "\n");
-      writer.write("255\n");
+    if (filepath.endsWith(".ppm")) {
+      try {
+        PrintWriter writer = new PrintWriter(new FileOutputStream(filepath));
+        writer.write("P3\n");
+        writer.write(this.width + " " + this.height + "\n");
+        writer.write("255\n");
 
-      for (int y = 0; y < height; y++) {
-        for (int x = 0; x < width; x++) {
-          double alpha = this.pixels[y][x].getAlpha() ;
-          int red = (int) (this.pixels[y][x].getRed() * alpha / 255);
-          int green = (int) (this.pixels[y][x].getGreen() * alpha / 255);
-          int blue = (int) (this.pixels[y][x].getBlue() * alpha / 255);
-          writer.write(red + " " + green + " " + blue + " ");
+        for (int y = 0; y < height; y++) {
+          for (int x = 0; x < width; x++) {
+            double alpha = this.pixels[y][x].getAlpha();
+            int red = (int) (this.pixels[y][x].getRed() * alpha / 255);
+            int green = (int) (this.pixels[y][x].getGreen() * alpha / 255);
+            int blue = (int) (this.pixels[y][x].getBlue() * alpha / 255);
+            writer.write(red + " " + green + " " + blue + " ");
+          }
+          writer.println();
+
         }
-        writer.println();
-
+        writer.close();
+        // throws IOException if something goes wrong with the saving process.
+      } catch (IOException e) {
+        throw new IllegalArgumentException("Error saving file: " + e.getMessage());
       }
-      writer.close();
-      // throws IOException if something goes wrong with the saving process.
-    } catch (IOException e) {
-      throw new IllegalArgumentException("Error saving file: " + e.getMessage());
     }
   }
+
+
+  public void saveFile(String filepath) {
+      BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        for (int y = 0; y < height; y++) {
+          for (int x = 0; x < width; x++) {
+            double a = pixels[y][x].getAlpha();
+            int r = (int) (pixels[y][x].getRed() * a / 255);
+            int g = (int) (pixels[y][x].getGreen() * a / 255);
+            int b = (int) (pixels[y][x].getBlue() * a / 255);
+            Color c = new Color(r, g, b);
+            img.setRGB(x, y, c.getRGB());
+          }
+        }
+        File imageFile = new File(filepath);
+        if (filepath.endsWith(".png")) {
+        try {
+          ImageIO.write(img,  "png", imageFile);
+        } catch (IOException e) {
+          throw new IllegalArgumentException("Error saving file: " + e.getMessage());
+        }
+      } else if (filepath.endsWith("jpg")) {
+          try {
+            ImageIO.write(img,  "jpg", imageFile);
+          } catch (IOException e) {
+            throw new IllegalArgumentException("Error saving file: " + e.getMessage());
+          }
+        }
+  }
 }
+

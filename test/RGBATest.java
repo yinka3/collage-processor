@@ -2,6 +2,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import cs3500.imageutil.IRGBA;
 import cs3500.imageutil.RGBA;
 
 /**
@@ -76,9 +77,9 @@ public class RGBATest {
 
   @Test
   public void testCopy() {
-    RGBA rgba2Copy;
-    RGBA rgba3Copy;
-    RGBA rgba4Copy;
+    IRGBA rgba2Copy;
+    IRGBA rgba3Copy;
+    IRGBA rgba4Copy;
 
     rgba2 = new RGBA(102, 123, 126);
     rgba3 = new RGBA(0, 0, 0);

@@ -5,6 +5,7 @@ import cs3500.filter.BlendingDifference;
 import cs3500.filter.DarkenByLuma;
 import cs3500.filter.IBlending;
 import cs3500.filter.IFilter;
+import cs3500.imageutil.ILayer;
 import cs3500.imageutil.Layer;
 import cs3500.imageutil.RGBA;
 import cs3500.model.Collage;
@@ -63,7 +64,7 @@ public class TestCollageModel {
     collage2.addLayer("Test Layer");
     assertTrue(collage2.getKnownImages().containsKey("Test Layer"));
 
-    Layer testLayer;
+    ILayer testLayer;
     testLayer = collage2.getKnownImages().get("Test Layer");
 
     assertEquals("Test Layer", testLayer.getName());

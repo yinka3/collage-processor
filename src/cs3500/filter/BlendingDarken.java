@@ -1,6 +1,8 @@
 package cs3500.filter;
 
 import cs3500.imageutil.HSL;
+import cs3500.imageutil.IHSL;
+import cs3500.imageutil.IRGBA;
 import cs3500.imageutil.RGBA;
 import cs3500.imageutil.RepresentationConverter;
 
@@ -12,15 +14,15 @@ import cs3500.imageutil.RepresentationConverter;
  */
 public class BlendingDarken implements IBlending {
   @Override
-  public RGBA apply(RGBA rgba1, RGBA rgba2) {
+  public IRGBA apply(IRGBA rgba1, IRGBA rgba2) {
     double r = rgba1.getRed() / 255.0;
     double g = rgba1.getGreen() / 255.0;
     double b = rgba1.getBlue() / 255.0;
     double r1 = rgba2.getRed() / 255.0;
     double g1 = rgba2.getGreen() / 255.0;
     double b1 = rgba2.getBlue() / 255.0;
-    HSL hsl1 = RepresentationConverter.convertRGBToHSL(r, g, b);
-    HSL hsl2 = RepresentationConverter.convertRGBToHSL(r1, g1, b1);
+    IHSL hsl1 = RepresentationConverter.convertRGBToHSL(r, g, b);
+    IHSL hsl2 = RepresentationConverter.convertRGBToHSL(r1, g1, b1);
     double newLight = hsl1.getLight() * hsl2.getLight();
     return RepresentationConverter.convertHSLToRGB(hsl1.getHue(), hsl1.getSaturation(), newLight,
             rgba1.getAlpha());

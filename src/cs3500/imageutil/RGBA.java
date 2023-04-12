@@ -6,7 +6,7 @@ package cs3500.imageutil;
  * Alpha values are used for transparency reasons and a double instead of integer
  * due to it being a decimal value.
  */
-public class RGBA {
+public class RGBA implements IRGBA {
 
   private final int r;
   private final int g;
@@ -59,8 +59,8 @@ public class RGBA {
    *  component, a new implementation we used.
    * @param hsl is the HSL class, which is a new version of a pixel.
    */
-  public RGBA(HSL hsl) {
-    RGBA temp = RepresentationConverter.convertHSLToRGB(hsl.getHue(),
+  public RGBA(IHSL hsl) {
+    IRGBA temp = RepresentationConverter.convertHSLToRGB(hsl.getHue(),
             hsl.getSaturation(), hsl.getLight(), this.getAlpha());
     this.r = clamp(temp.getRed());
     this.g = clamp(temp.getGreen());
@@ -158,16 +158,16 @@ public class RGBA {
    * @param bg is the background image that will be used transparency.
    * @return a modified RGBA component to show the change.
    */
-  public RGBA transparency(RGBA bg) {
-    double a_2 = ((this.a / 255) + ((bg.a / 255) * (1 - (this.a / 255))));
+  public IRGBA transparency(IRGBA bg) {
+    double a_2 = ((this.a / 255) + ((bg.getAlpha() / 255) * (1 - (this.a / 255))));
     if (a_2 == 0.0) {
       return this.copy();
     }
-    int r = (int) (((((this.a / 255) * this.r) + (((bg.a / 255) * bg.r)
+    int r = (int) (((((this.a / 255) * this.r) + (((bg.getAlpha() / 255) * bg.getRed())
             * (1 - (this.a / 255))))) * (1 / a_2));
-    int g = (int) (((((this.a / 255) * this.g) + (((bg.a / 255) * bg.g)
+    int g = (int) (((((this.a / 255) * this.g) + (((bg.getAlpha() / 255) * bg.getGreen())
             * (1 - (this.a / 255))))) * (1 / a_2));
-    int b = (int) (int) (((((this.a / 255) * this.b) + (((bg.a / 255) * bg.b)
+    int b = (int) (int) (((((this.a / 255) * this.b) + (((bg.getAlpha() / 255) * bg.getBlue())
             * (1 - (this.a / 255))))) * (1 / a_2));
     return new RGBA(r, g, b,(a_2 * 255));
   }
@@ -176,7 +176,7 @@ public class RGBA {
    * Returns the deep copy of an RGBA object, while avoiding aliasing issues.
    * @return a copy of the RGBA object of the red, green, blue, and alpha values.
    */
-  public RGBA copy() {
+  public IRGBA copy() {
     return new RGBA(this.r, this.g, this.b, this.a);
   }
 

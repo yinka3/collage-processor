@@ -4,6 +4,8 @@ import java.util.Map;
 
 import cs3500.filter.IBlending;
 import cs3500.filter.IFilter;
+import cs3500.imageutil.ILayer;
+import cs3500.imageutil.IRGBA;
 import cs3500.imageutil.Layer;
 import cs3500.imageutil.RGBA;
 
@@ -33,14 +35,14 @@ public interface ICollage {
    *
    * @return a 2d array of RGBAs that make up a composite image of all the layers.
    */
-  RGBA[][] finalPixel();
+  IRGBA[][] finalPixel();
 
   /**
    * Saves a PPM image to a file system.
    *
    * @param filepath the filepath the PPM image will be saved to.
    */
-  void savePPMImage(String filepath);
+  void saveImage(String filepath);
 
   /**
    * Saves a project to a given filepath.
@@ -102,5 +104,5 @@ public interface ICollage {
    *
    * @return a string key to layer value hashmap.
    */
-  Map<String, Layer> getKnownImages();
+  Map<String, ILayer> getKnownImages();
 }
