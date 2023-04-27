@@ -5,9 +5,7 @@ import cs3500.filter.FilterBlue;
 import cs3500.imageutil.ILayer;
 import cs3500.imageutil.IRGBA;
 import cs3500.imageutil.Layer;
-import cs3500.imageutil.PPMUtil;
-import cs3500.imageutil.RGBA;
-
+import cs3500.imageutil.ImageUtil;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -15,7 +13,7 @@ import static org.junit.Assert.assertEquals;
  */
 public class LayerTest {
 
-  PPMUtil testImg;
+  ImageUtil testImg;
 
   String imgName;
 
@@ -52,7 +50,7 @@ public class LayerTest {
   @Test
   public void testNewAlpha() {
     this.imgName = "Yinka-Abi.ppm";
-    this.testImg = new PPMUtil(this.imgName);
+    this.testImg = new ImageUtil(this.imgName);
     ILayer layer1 = new Layer("firstLayer", this.height, this.width);
     IRGBA[][] tempLayer = layer1.visualize();
     for (int i = 0; i < this.height; i++) {
@@ -72,7 +70,7 @@ public class LayerTest {
   @Test
   public void testNewFilter() {
     this.imgName = "Yinka-Abi.ppm";
-    this.testImg = new PPMUtil(this.imgName);
+    this.testImg = new ImageUtil(this.imgName);
     ILayer layer1 = new Layer("firstLayer", this.height, this.width);
     IRGBA[][] tempLayer = layer1.visualize();
     for (int i = 0; i < this.height; i++) {

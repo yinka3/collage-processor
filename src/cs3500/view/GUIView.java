@@ -10,7 +10,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
-
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -27,12 +26,12 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
-
 import cs3500.controller.Commands;
 
 /**
  * This class represents the Graphical User Interface that allows for the user to visually see
- * all the changes their inputs make in the program.
+ * all the changes their inputs make in the program. In addition, this allows the user to interact
+ * with the collager in a more advance way.
  * The class extends the JFrame class which allows for frame pop up, and the class also
  * implements GUI, CollageView, and ActionLister interface.
  * ActionListen allows for the action for buttons to have an effect in the GUI.

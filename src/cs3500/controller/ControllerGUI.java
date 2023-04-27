@@ -86,6 +86,10 @@ public class ControllerGUI implements Commands {
     }
   }
 
+  /**
+   * gives the GUI view safe access to the commands from the controller.
+   * @param v is the GUI view implementation.
+   */
   public void setView(GUIView v) {
     guiView = v;
     guiView.addCommands(this);

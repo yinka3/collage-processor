@@ -1,13 +1,14 @@
 package cs3500.controller;
 
 /**
- * Defines the commands possible for a collage. This will be used a bridge between the
- * accessing abilities from the model and it being used in the controller portion of the program.
+ * The interface Commands defines the user commands possible for a collage. This will be used a
+ * bridge between the accessing abilities from the model and it being used in the controller portion
+ * of the program.
  */
 public interface Commands {
 
   /**
-   * Creates new collage project.
+   * Creates new empty collage project where the dimensions are the user desired height and width.
    *
    * @param height desired height of the project.
    * @param width  desired width of the project.
@@ -37,7 +38,7 @@ public interface Commands {
   void saveImage(String nameOfImage);
 
   /**
-   * Saves a collage as a project. When a collage is saved like this, it can continue to be editted.
+   * Saves a collage as a project. When a collage is saved like this, it can continue to be edited.
    * @param nameOfProject the name the collage will be saved as.
    */
   void saveProject(String nameOfProject);

@@ -1,19 +1,16 @@
 new-project 1000 1000
 add-layer yinka
 add-layer abi
-load-image yinka res/sample.ppm 10 10
+load-image yinka res/gon.jpg 20 20
 set-filter yinka red-component
-load-image abi res/tako.ppm 200 100
-set-filter abi green-component
-set-blend abi BlendingDifference
-add-layer kat
-load-image kat res/luffy-icon.jpg 50 50
-set-filter kat red-component
+load-image abi res/kon.jpg 100 100
+set-filter abi brighten-value
 add-layer naya
-load-image naya res/Program-Show.png 400 400
-set-filter naya green-component
-save-image theOne.png
-save-image theOne.jpg
-save-project theOne.collage
-load-project res/finalImage.collage
+load-image naya res/Program-Show.png 200 200
+set-filter naya blue-component
+set-blend naya BlendingDifference
+save-image res/theOne.ppm
+save-image res/theOne.png
+save-image res/theOne.jpg
+save-project res/theOne.collage
 quit

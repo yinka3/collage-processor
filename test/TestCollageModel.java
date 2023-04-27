@@ -6,7 +6,6 @@ import cs3500.filter.DarkenByLuma;
 import cs3500.filter.IBlending;
 import cs3500.filter.IFilter;
 import cs3500.imageutil.ILayer;
-import cs3500.imageutil.Layer;
 import cs3500.imageutil.RGBA;
 import cs3500.model.Collage;
 import cs3500.model.ICollage;

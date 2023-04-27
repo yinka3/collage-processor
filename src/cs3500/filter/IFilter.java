@@ -2,11 +2,12 @@ package cs3500.filter;
 
 
 import cs3500.imageutil.IRGBA;
-import cs3500.imageutil.RGBA;
+
 
 
 /**
- * This interface defines the public methods for a filter that uses and changes only one pixel.
+ * The main functionality of the interface is used to modify one RGBA component on a low-level
+ * that can then be used at a higher level in the layers class.
  * This interface will be used through the layer class.
  */
 public interface IFilter {

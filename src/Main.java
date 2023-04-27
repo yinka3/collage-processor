@@ -15,8 +15,9 @@ import cs3500.view.View;
 import cs3500.controller.IController;
 
 /**
- * The main is designed to run three versions of the model controller, one dealing with the gui,
- * the other dealing with terminal user input and the last dealing with script files.
+ * The main in the intersection of the model, view and controller. This is designed to run three
+ * versions of the model controller, one that involves GUI, the other with terminal user input and
+ * the last dealing with script files.
  */
 public class Main {
   /**

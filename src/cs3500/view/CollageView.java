@@ -3,7 +3,9 @@ package cs3500.view;
 import java.io.IOException;
 
 /**
- * An interface for a collage view, a way to observe the state of a collage.
+ * The interface for a collage view. This interface servers as way to observe the state of a collage
+ * and serves a simple view for the user.
+ * It transmits messages to the controller server.
  */
 public interface CollageView {
 

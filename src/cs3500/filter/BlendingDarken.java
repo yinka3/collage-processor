@@ -1,9 +1,7 @@
 package cs3500.filter;
 
-import cs3500.imageutil.HSL;
 import cs3500.imageutil.IHSL;
 import cs3500.imageutil.IRGBA;
-import cs3500.imageutil.RGBA;
 import cs3500.imageutil.RepresentationConverter;
 
 /**

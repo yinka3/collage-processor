@@ -8,7 +8,6 @@ import cs3500.filter.IBlending;
 import cs3500.filter.IFilter;
 import cs3500.model.ICollage;
 import cs3500.view.CollageView;
-import cs3500.view.View;
 import static cs3500.controller.ControllerGUI.getIFilterName;
 
 /**
@@ -40,15 +39,30 @@ public class Controller implements IController {
     this.view = view;
   }
 
-
+  /**
+   * Allows a given string to dictate which Filter class should be called.
+   * @param filterOption string representing the desired filer option
+   * @return IFilter class that applies filter to image
+   */
   private IFilter filterChoice(String filterOption) {
     return getIFilterName(filterOption);
   }
 
+
+  /**
+   * Allows a given string to dictate which blending class should be called.
+   * @param blenderOption string representing the desired blending option.
+   * @return IBlending class that applies blending to image
+   */
   private IBlending getIBlenderName(String blenderOption) {
     return getiBlending(blenderOption);
   }
 
+  /**
+   * This method delegated to different blending classes depending of the blendingOption.
+   * @param blenderOption that represented the wanted blending type to be done to image.
+   * @return Corresponding IBlending class that allows the wanted blending filer to be applied.
+   */
   static IBlending getiBlending(String blenderOption) {
     switch (blenderOption) {
       case "BlendingBrighten":

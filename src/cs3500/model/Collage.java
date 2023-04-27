@@ -8,19 +8,19 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
-
 import cs3500.filter.IBlending;
 import cs3500.filter.IFilter;
 import cs3500.imageutil.ILayer;
 import cs3500.imageutil.IRGBA;
 import cs3500.imageutil.Layer;
-import cs3500.imageutil.PPMUtil;
+import cs3500.imageutil.ImageUtil;
 import cs3500.imageutil.RGBA;
 
 
 /**
  * This class is used for the functionality of a collage processor that takes in all the layers
- * and do the main processing of the layers.
+ * and do the main processing of the layers. It is a hashmap of the layer names to the actual
+ * contents of the layers.
  * This class implements the ICollage interface.
  */
 public class Collage implements ICollage {
@@ -137,7 +137,7 @@ public class Collage implements ICollage {
       throw new IllegalStateException("project has not started");
     }
 
-    this.knownImages.get(layerName).addImage(new PPMUtil(imgName), yOffset, xOffset);
+    this.knownImages.get(layerName).addImage(new ImageUtil(imgName), yOffset, xOffset);
   }
 
   /**
@@ -161,12 +161,16 @@ public class Collage implements ICollage {
     return finalImage;
   }
 
-
+  /**
+   * Saves a PPM image to a file system.
+   *
+   * @param filepath the filepath the PPM image will be saved to.
+   */
   public void saveImage(String filepath) {
     if (filepath.endsWith(".ppm")) {
-      new PPMUtil(this.finalPixel(), filepath, this.height, this.width).savePPM(filepath);
+      new ImageUtil(this.finalPixel(), filepath, this.height, this.width).savePPM(filepath);
     } else if (filepath.endsWith(".jpg") || filepath.endsWith(".png")) {
-      new PPMUtil(this.finalPixel(), filepath, this.height, this.width).saveFile(filepath);
+      new ImageUtil(this.finalPixel(), filepath, this.height, this.width).saveFile(filepath);
     }
   }
 

@@ -1,5 +1,11 @@
 # How To Use Our Graphic User Interface
 
+    * Update(04/12/23)
+        - The load PPM Image or Project has been changed to just load Imaged or Project as we have
+            allowed for the ability to read in more image types which are png and jpg file types.
+        -In addtion, the save image now also has the ability to save files as a png and jpg files.
+        - No additional featues were added to the GUI in order for this new system support.
+
     * When the GUI first pops up, a quick direction for where things are
         - The left has the layer processing how many layers are in the project and what filters
           are being applied to certain layers. The right side has all the filters to apply onto
@@ -31,4 +37,13 @@
         are two buttons, the one on the left is for saving a ppm image while the other is for
         saving a collage. When either buttons are clicked, a pop up of the file explorer will show
         and then enter the name you want for your new ppm image or collage.
-    
+
+### Commands of the GUI/Text version
+    - AddImageToLayer adds an image to a layer.
+    - AddLayer adds a layer to a collage.
+    - CreateProject creates a new collage.
+    - Load loads an image on to the processor.
+    - Save collage saves the college as a active project so it can continue to be worked on.
+    - SaveImage saves the collage as an image that cannot be edited.
+    - Filter applies a filter to a layer.
+    - Set Blend applies a filter to certain layers

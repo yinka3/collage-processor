@@ -1,7 +1,7 @@
 package cs3500.filter;
 
 import cs3500.imageutil.IRGBA;
-import cs3500.imageutil.RGBA;
+
 
 /**
  * An interface for blending filters. Blending filters use RGBAs from multiple layers to apply the

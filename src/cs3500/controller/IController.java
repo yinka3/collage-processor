@@ -7,7 +7,7 @@ package cs3500.controller;
 public interface IController {
 
   /**
-   * Applies a command to the collage.
+   * Applies a command to the collage to be executed.
    */
   void apply();
 

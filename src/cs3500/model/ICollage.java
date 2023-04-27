@@ -6,8 +6,7 @@ import cs3500.filter.IBlending;
 import cs3500.filter.IFilter;
 import cs3500.imageutil.ILayer;
 import cs3500.imageutil.IRGBA;
-import cs3500.imageutil.Layer;
-import cs3500.imageutil.RGBA;
+
 
 
 /**

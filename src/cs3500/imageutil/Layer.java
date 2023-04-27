@@ -27,8 +27,8 @@ public class Layer implements ILayer {
 
 
   /**
-   * The constructor of the Layer that has all the necessary contents for a layer
-   * to do different things.
+   * The constructor of the Layer that has all the necessary contents to create a new layer
+   * for modification purposes.
    * @param name String value of the layer name being modified.
    * @param height integer of the layer height being modified.
    * @param width integer of the layer width being modified.
@@ -97,7 +97,7 @@ public class Layer implements ILayer {
    * @param filtered the 2D array of pixel to be set onto layer filtered.
    * @return a new 2D array onto the layer that are filtered.
    */
-  public IRGBA[][] getFilter(IRGBA[][] filtered) {
+  public IRGBA[][] applyFilter(IRGBA[][] filtered) {
     for (int j = 0; j < this.height; j++) {
       for (int i = 0; i < this.width; i++) {
         filtered[j][i] = this.filter.apply(filtered[j][i]);
@@ -141,17 +141,17 @@ public class Layer implements ILayer {
    * @return a filtered 2D array of pixels of the layer
    */
   public IRGBA[][] visualize() {
-    return this.getFilter(this.getNewRgba2());
+    return this.applyFilter(this.getNewRgba2());
   }
 
   /**
-   * Helper method for main model method that can read in ppm image and gets a possible
+   * Helper method for main model method that can read in an image and gets a possible
    * offset positions.
-   * @param imgName String of the ppm image name.
+   * @param imgName String of the image name.
    * @param yOffset integer of the offset position of the y coordinate.
    * @param xOffset integer of the offset position of the x coordinate.
    */
-  public void addImage(IPPMUtil imgName, int yOffset, int xOffset) {
+  public void addImage(IImageUtil imgName, int yOffset, int xOffset) {
     if (imgName == null) {
       throw new IllegalArgumentException("no image is here");
     }
